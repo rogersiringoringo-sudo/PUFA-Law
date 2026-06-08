@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PUFA Law — Events</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .events-container { max-width:1200px;margin:0 auto;padding:60px 40px; }
+  .events-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:32px; }
+  .event-card { background:var(--white);border:1px solid var(--border);overflow:hidden;transition:all 0.3s;cursor:pointer; }
+  .event-card:hover { transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,0.08); }
+  .event-img { height:200px;background:linear-gradient(135deg,var(--dark),var(--crimson));display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--gold-light);letter-spacing:3px;position:relative; }
+  .event-img.past { background:linear-gradient(135deg,#3A3028,#666); }
+  .event-date-badge { position:absolute;top:16px;left:16px;background:var(--gold);padding:8px 14px;text-align:center; }
+  .event-date-badge strong { display:block;font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--dark); }
+  .event-date-badge span { font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dark-mid); }
+  .event-status { position:absolute;top:16px;right:16px;padding:4px 12px;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase; }
+  .status-upcoming { background:rgba(201,168,76,0.9);color:var(--dark); }
+  .status-selesai { background:rgba(0,0,0,0.5);color:#ccc; }
+  .event-body { padding:24px; }
+  .event-cat { font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:8px; }
+  .event-name { font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--dark);line-height:1.3;margin-bottom:10px; }
+  .event-meta { display:flex;gap:16px;font-size:11px;color:var(--text-light);margin-bottom:14px;flex-wrap:wrap; }
+  .event-desc { font-size:12px;color:var(--text-light);line-height:1.7;margin-bottom:20px; }
+  .panitia-tabs { display:flex;gap:8px;margin-bottom:28px;flex-wrap:wrap; }
+  .ptab { font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:8px 18px;background:var(--marble);border:1px solid var(--border);cursor:pointer;transition:all 0.2s; }
+  .ptab.active,.ptab:hover { background:var(--gold);color:var(--dark);border-color:var(--gold); }
+  .panitia-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:20px; }
+  .panitia-card { background:var(--white);border:1px solid var(--border);padding:24px;text-align:center;transition:all 0.3s; }
+  .panitia-card:hover { border-color:var(--gold);transform:translateY(-3px); }
+  .panitia-avatar { width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--gold-light),var(--gold));display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--dark);margin:0 auto 12px; }
+  .panitia-name { font-size:13px;font-weight:700;color:var(--dark);margin-bottom:3px; }
+  .panitia-role { font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:5px; }
+  .panitia-div { font-size:11px;color:var(--text-light); }
+  @media(max-width:900px){ .events-grid{grid-template-columns:1fr;} .panitia-grid{grid-template-columns:repeat(2,1fr);} }
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">PUFA <span>LAW</span></a>
+  <div class="nav-links">
+    <a href="index.html">HOME</a><a href="about.html">ABOUT</a>
+    <a href="events.html" class="active">EVENTS</a><a href="gallery.html">GALLERY</a>
+    <a href="team.html">TEAM</a><a href="news.html">NEWS</a><a href="contact.html">CONTACT US</a>
+  </div>
+  <div class="nav-actions"><a href="admin.html" style="text-decoration:none;"><button class="btn-admin">ADMIN</button></a></div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-content">
+    <h1 class="page-hero-title">Upcoming <em>Events</em></h1>
+    <p class="page-hero-sub">Jadwal & Pelaksanaan</p>
+    <div class="breadcrumb">Home <span>›</span> <span>Events</span></div>
+  </div>
+</div>
+
+<div class="events-container">
+  <div class="section-header" style="text-align:left;margin-bottom:40px;">
+    <div class="section-eyebrow">Acara Mendatang & Terdahulu</div>
+    <h2 class="section-title">Kalender <em>PUFA Law</em></h2>
+    <div class="section-line" style="margin:16px 0 0;"></div>
+  </div>
+  <div class="events-grid" id="eventsGrid"></div>
+
+  <!-- PANITIA -->
+  <div style="margin-top:70px;">
+    <div class="section-eyebrow">Struktur Kepanitiaan</div>
+    <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(24px,3vw,38px);font-weight:700;color:var(--dark);margin-bottom:8px;">Panitia & <em style="font-style:italic;color:var(--crimson);">Penanggungjawab Event</em></h2>
+    <p style="font-size:12px;color:var(--text-light);margin-bottom:24px;">Kenali para profesional yang bertanggung jawab dalam menyukseskan setiap event PUFA Law.</p>
+    <div class="panitia-tabs" id="panitiaTabsContainer"></div>
+    <div id="panitiaContent"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div><div class="footer-brand-name">PUFA <span>LAW</span></div><p class="footer-desc" id="footerDesc"></p></div>
+    <div><div class="footer-col-title">Navigasi</div><ul class="footer-links"><li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="gallery.html">Gallery</a></li></ul></div>
+    <div><div class="footer-col-title">Lainnya</div><ul class="footer-links"><li><a href="team.html">Team</a></li><li><a href="news.html">News</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div><div class="footer-col-title">Kontak</div><ul class="footer-links" id="footerContact"></ul></div>
+  </div>
+  <div class="footer-bottom"><span id="footerCopy"></span><span id="footerRight"></span></div>
+</footer>
+
+<script src="data.js"></script>
+<script>
+(function(){
+  const events = PufaData.get('events');
+  const panitia = PufaData.get('panitia');
+  const s = PufaData.get('settings');
+  const c = PufaData.get('contact');
+
+  // Events grid
+  function fmtDate(d){ const dt=new Date(d); return dt.toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}); }
+  function getDay(d){ return new Date(d).getDate(); }
+  function getMonthYear(d){ const dt=new Date(d); return dt.toLocaleDateString('id-ID',{month:'short',year:'numeric'}); }
+
+  document.getElementById('eventsGrid').innerHTML = events.map(e=>`
+    <div class="event-card">
+      <div class="event-img ${e.status==='Selesai'?'past':''}">
+        ${e.category.toUpperCase()}
+        <div class="event-date-badge"><strong>${getDay(e.date)}</strong><span>${getMonthYear(e.date)}</span></div>
+        <div class="event-status ${e.status==='Upcoming'?'status-upcoming':'status-selesai'}">${e.status}</div>
+      </div>
+      <div class="event-body">
+        <div class="event-cat">${e.category}</div>
+        <div class="event-name">${e.name}</div>
+        <div class="event-meta"><span>${e.time} WIB</span><span>${e.location}</span></div>
+        <div class="event-desc">${e.desc}</div>
+        <button class="${e.status==='Upcoming'?'btn-primary':'btn-outline'}" style="font-size:10px;padding:10px 20px;">${e.btn}</button>
+      </div>
+    </div>`).join('');
+
+  // Panitia tabs — group by event
+  const eventNames = [...new Set(panitia.map(p=>p.event))];
+  const tabsEl = document.getElementById('panitiaTabsContainer');
+  const contentEl = document.getElementById('panitiaContent');
+
+  tabsEl.innerHTML = eventNames.map((en,i)=>`
+    <div class="ptab ${i===0?'active':''}" onclick="showPanitia(${i},this)">${en}</div>`).join('');
+
+  contentEl.innerHTML = eventNames.map((en,i)=>{
+    const members = panitia.filter(p=>p.event===en);
+    return `<div class="panitia-tab-content" id="pt${i}" style="display:${i===0?'block':'none'};">
+      <div class="panitia-grid">${members.map(m=>`
+        <div class="panitia-card">
+          <div class="panitia-avatar">${m.name.split(' ').map(w=>w[0]).slice(0,2).join('')}</div>
+          <div class="panitia-name">${m.name}</div>
+          <div class="panitia-role">${m.role}</div>
+          <div class="panitia-div">${m.division}</div>
+        </div>`).join('')}
+      </div></div>`;
+  }).join('');
+
+  // Footer
+  document.getElementById('footerDesc').textContent = s.footerDesc;
+  document.getElementById('footerCopy').textContent = s.copyright;
+  document.getElementById('footerRight').textContent = s.footerRight;
+  document.getElementById('footerContact').innerHTML = `<li><a>${c.email.split('\n')[0]}</a></li><li><a>${c.phone.split('\n')[0]}</a></li>`;
+})();
+
+function showPanitia(idx, el){
+  document.querySelectorAll('.panitia-tab-content').forEach((c,i)=>c.style.display=i===idx?'block':'none');
+  document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>

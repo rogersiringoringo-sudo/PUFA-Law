@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PUFA Law — Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #C9A84C;
+  --gold-light: #E8C96A;
+  --gold-dark: #8B6914;
+  --crimson: #8B1A2B;
+  --white: #FAFAF8;
+  --off-white: #F5F2EC;
+  --marble: #EDEDE8;
+  --dark: #1A1410;
+  --dark-mid: #2C2420;
+  --text: #3A3028;
+  --text-light: #7A6E65;
+  --border: rgba(201,168,76,0.3);
+  --sidebar-w: 260px;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; font-family: 'Montserrat', sans-serif; background: var(--off-white); color: var(--text); overflow: hidden; }
+
+/* ===== LOGIN ===== */
+#loginScreen {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--dark);
+  display: flex; align-items: center; justify-content: center;
+}
+.login-box {
+  background: var(--dark-mid); border: 1px solid var(--border);
+  padding: 52px 48px; width: 420px; text-align: center; position: relative;
+}
+.login-box::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--crimson), var(--gold));
+}
+.login-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 38px; font-weight: 700; color: var(--gold); letter-spacing: 4px; margin-bottom: 4px;
+}
+.login-logo span { color: var(--crimson); }
+.login-sub {
+  font-size: 10px; font-weight: 600; letter-spacing: 3px;
+  text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 36px;
+}
+.login-input {
+  width: 100%; padding: 13px 16px; margin-bottom: 12px;
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+  color: var(--white); font-family: 'Montserrat', sans-serif;
+  font-size: 13px; outline: none; transition: border-color 0.2s;
+}
+.login-input:focus { border-color: var(--gold); }
+.login-btn {
+  width: 100%; padding: 14px; margin-top: 6px;
+  background: var(--gold); color: var(--dark); border: none; cursor: pointer;
+  font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s;
+}
+.login-btn:hover { background: var(--crimson); color: var(--white); }
+.login-error { font-size: 12px; color: #e05050; margin-bottom: 12px; display: none; }
+.login-back { margin-top: 16px; font-size: 11px; color: rgba(255,255,255,0.3); cursor: pointer; transition: color 0.2s; }
+.login-back:hover { color: rgba(255,255,255,0.7); }
+
+/* ===== LAYOUT ===== */
+#app { display: none; height: 100vh; }
+.layout { display: flex; height: 100vh; }
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  width: var(--sidebar-w); background: var(--dark);
+  display: flex; flex-direction: column;
+  border-right: 2px solid var(--gold); flex-shrink: 0;
+  overflow-y: auto;
+}
+.sidebar-header {
+  padding: 24px 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.sidebar-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 700; color: var(--gold); letter-spacing: 3px;
+}
+.sidebar-logo span { color: var(--crimson); }
+.sidebar-role {
+  font-size: 9px; font-weight: 600; letter-spacing: 2px;
+  text-transform: uppercase; color: rgba(255,255,255,0.3); margin-top: 4px;
+}
+.sidebar-nav { flex: 1; padding: 16px 12px; }
+.nav-group { margin-bottom: 24px; }
+.nav-group-title {
+  font-size: 9px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: rgba(255,255,255,0.25);
+  margin-bottom: 8px; padding: 0 8px;
+}
+.nav-btn {
+  width: 100%; padding: 10px 12px; margin-bottom: 2px;
+  background: transparent; border: none; border-radius: 3px;
+  color: rgba(255,255,255,0.55); cursor: pointer;
+  font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 500;
+  text-align: left; transition: all 0.2s;
+  display: flex; align-items: center; gap: 10px;
+}
+.nav-btn:hover { background: rgba(201,168,76,0.08); color: var(--gold-light); }
+.nav-btn.active { background: rgba(201,168,76,0.15); color: var(--gold); font-weight: 600; }
+.nav-btn .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(255,255,255,0.2); flex-shrink: 0;
+}
+.nav-btn.active .dot { background: var(--gold); }
+.sidebar-footer {
+  padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.07);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.btn-logout {
+  font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+  padding: 8px 16px; background: rgba(139,26,43,0.2); border: 1px solid var(--crimson);
+  color: var(--crimson); cursor: pointer; transition: all 0.2s;
+}
+.btn-logout:hover { background: var(--crimson); color: var(--white); }
+.btn-visit {
+  font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+  padding: 8px 16px; background: rgba(201,168,76,0.1); border: 1px solid var(--gold);
+  color: var(--gold); cursor: pointer; transition: all 0.2s; text-decoration: none;
+}
+.btn-visit:hover { background: var(--gold); color: var(--dark); }
+
+/* ===== MAIN ===== */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.topbar {
+  height: 60px; background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 0 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.topbar-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 700; color: var(--dark);
+}
+.topbar-actions { display: flex; gap: 10px; align-items: center; }
+.content { flex: 1; overflow-y: auto; padding: 32px; }
+
+/* ===== PANELS ===== */
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* ===== CARDS ===== */
+.stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 28px; }
+.stat-card {
+  background: var(--white); border: 1px solid var(--border);
+  padding: 22px; text-align: center;
+}
+.stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 40px; font-weight: 700; color: var(--gold-dark);
+}
+.stat-label { font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--text-light); margin-top: 4px; }
+
+/* ===== SECTION BLOCK ===== */
+.edit-block {
+  background: var(--white); border: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+.edit-block-header {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+  background: linear-gradient(90deg, var(--dark) 0%, var(--dark-mid) 100%);
+}
+.edit-block-title {
+  font-size: 11px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--gold);
+}
+.edit-block-body { padding: 24px; }
+
+/* ===== FORM ===== */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.form-full { grid-column: 1 / -1; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--text-light);
+}
+.form-input, .form-textarea, .form-select {
+  padding: 11px 14px;
+  background: var(--off-white); border: 1px solid var(--border);
+  font-family: 'Montserrat', sans-serif; font-size: 13px; color: var(--text);
+  outline: none; transition: border-color 0.2s; width: 100%;
+}
+.form-input:focus, .form-textarea:focus, .form-select:focus { border-color: var(--gold); }
+.form-textarea { resize: vertical; min-height: 100px; }
+
+/* ===== BUTTONS ===== */
+.btn-save {
+  padding: 10px 24px; background: var(--gold); color: var(--dark);
+  border: none; cursor: pointer; font-family: 'Montserrat', sans-serif;
+  font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  transition: all 0.2s;
+}
+.btn-save:hover { background: var(--gold-dark); color: var(--white); }
+.btn-add {
+  padding: 9px 20px; background: transparent; color: var(--gold);
+  border: 1px solid var(--gold); cursor: pointer; font-family: 'Montserrat', sans-serif;
+  font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  transition: all 0.2s;
+}
+.btn-add:hover { background: var(--gold); color: var(--dark); }
+.btn-del {
+  padding: 6px 12px; background: transparent; color: var(--crimson);
+  border: 1px solid var(--crimson); cursor: pointer; font-family: 'Montserrat', sans-serif;
+  font-size: 10px; font-weight: 700; letter-spacing: 1px;
+  transition: all 0.2s;
+}
+.btn-del:hover { background: var(--crimson); color: var(--white); }
+.btn-edit {
+  padding: 6px 12px; background: transparent; color: var(--gold-dark);
+  border: 1px solid var(--gold-dark); cursor: pointer; font-family: 'Montserrat', sans-serif;
+  font-size: 10px; font-weight: 700; letter-spacing: 1px; transition: all 0.2s;
+}
+.btn-edit:hover { background: var(--gold-dark); color: var(--white); }
+
+/* ===== TABLE ===== */
+.tbl { width: 100%; border-collapse: collapse; }
+.tbl th {
+  padding: 11px 14px; background: var(--dark); color: var(--gold);
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; text-align: left;
+}
+.tbl td {
+  padding: 11px 14px; border-bottom: 1px solid var(--border);
+  font-size: 12px; color: var(--text); vertical-align: middle;
+}
+.tbl tr:hover td { background: var(--off-white); }
+.tbl-actions { display: flex; gap: 6px; }
+
+/* ===== BADGE ===== */
+.badge {
+  padding: 3px 10px; font-size: 9px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase; display: inline-block;
+}
+.badge-green { background: rgba(40,120,40,0.1); color: #287828; }
+.badge-gold { background: rgba(201,168,76,0.15); color: var(--gold-dark); }
+.badge-red { background: rgba(139,26,43,0.1); color: var(--crimson); }
+
+/* ===== TOGGLE ===== */
+.collapsible { cursor: pointer; }
+.collapsible-content { display: block; }
+.collapsible-content.collapsed { display: none; }
+
+/* ===== TOAST ===== */
+#toast {
+  position: fixed; bottom: 32px; right: 32px;
+  background: var(--dark); color: var(--gold);
+  padding: 14px 24px; font-size: 12px; font-weight: 600; letter-spacing: 1px;
+  border-left: 3px solid var(--gold); z-index: 9999;
+  transform: translateY(80px); opacity: 0; transition: all 0.3s;
+}
+#toast.show { transform: translateY(0); opacity: 1; }
+
+/* ===== IMAGE UPLOAD PLACEHOLDER ===== */
+.img-upload {
+  border: 2px dashed var(--border); background: var(--off-white);
+  height: 120px; display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 8px; cursor: pointer; transition: border-color 0.2s;
+}
+.img-upload:hover { border-color: var(--gold); }
+.img-upload-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; color: var(--text-light); }
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--marble); }
+::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+/* ===== MEMBER CARDS (team/panitia) ===== */
+.member-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 16px; }
+.member-card {
+  background: var(--off-white); border: 1px solid var(--border);
+  padding: 16px; position: relative;
+}
+.member-card-actions { position: absolute; top: 10px; right: 10px; display: flex; gap: 4px; }
+.member-name { font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 2px; }
+.member-role { font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); }
+.member-dept { font-size: 11px; color: var(--text-light); margin-top: 2px; }
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; z-index: 8000;
+  background: rgba(0,0,0,0.5); align-items: center; justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal-box {
+  background: var(--white); border: 1px solid var(--border);
+  width: 560px; max-height: 85vh; overflow-y: auto;
+  position: relative;
+}
+.modal-header {
+  padding: 18px 24px; background: var(--dark);
+  display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 2px solid var(--gold);
+}
+.modal-title { font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); }
+.modal-close {
+  background: none; border: none; color: rgba(255,255,255,0.5);
+  font-size: 18px; cursor: pointer; transition: color 0.2s;
+}
+.modal-close:hover { color: var(--white); }
+.modal-body { padding: 24px; }
+.modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; gap: 10px; justify-content: flex-end; }
+</style>
+</head>
+<body>
+
+<!-- ===== LOGIN SCREEN ===== -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">PUFA <span>LAW</span></div>
+    <div class="login-sub">Admin Panel</div>
+    <div class="login-error" id="loginError">Email atau password salah!</div>
+    <input type="email" class="login-input" id="loginEmail" placeholder="Email Admin" />
+    <input type="password" class="login-input" id="loginPass" placeholder="Password" />
+    <button class="login-btn" onclick="doLogin()">Masuk ke Dashboard</button>
+    <div class="login-back" onclick="window.location.href='index.html'">Kembali ke Website</div>
+  </div>
+</div>
+
+<!-- ===== APP ===== -->
+<div id="app">
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">PUFA <span>LAW</span></div>
+      <div class="sidebar-role">Admin Panel</div>
+    </div>
+    <div class="sidebar-nav">
+      <div class="nav-group">
+        <div class="nav-group-title">Dashboard</div>
+        <button class="nav-btn active" onclick="showPanel('dashboard',this)"><span class="dot"></span> Overview</button>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-title">Halaman Website</div>
+        <button class="nav-btn" onclick="showPanel('panel-home',this)"><span class="dot"></span> Home</button>
+        <button class="nav-btn" onclick="showPanel('panel-about',this)"><span class="dot"></span> About</button>
+        <button class="nav-btn" onclick="showPanel('panel-events',this)"><span class="dot"></span> Events</button>
+        <button class="nav-btn" onclick="showPanel('panel-gallery',this)"><span class="dot"></span> Gallery</button>
+        <button class="nav-btn" onclick="showPanel('panel-team',this)"><span class="dot"></span> Team</button>
+        <button class="nav-btn" onclick="showPanel('panel-news',this)"><span class="dot"></span> News</button>
+        <button class="nav-btn" onclick="showPanel('panel-contact',this)"><span class="dot"></span> Contact Us</button>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-title">Pengaturan</div>
+        <button class="nav-btn" onclick="showPanel('panel-settings',this)"><span class="dot"></span> Pengaturan Situs</button>
+        <button class="nav-btn" onclick="showPanel('panel-users',this)"><span class="dot"></span> Pengguna Admin</button>
+      </div>
+    </div>
+    <div class="sidebar-footer">
+      <button class="btn-logout" onclick="doLogout()">Logout</button>
+      <a class="btn-visit" href="index.html" target="_blank">Lihat Site</a>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-title" id="topbarTitle">Dashboard Overview</div>
+      <div class="topbar-actions">
+        <span style="font-size:11px;color:var(--text-light);">Admin: <strong id="adminName">Super Admin</strong></span>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ===== DASHBOARD ===== -->
+      <div class="panel active" id="dashboard">
+        <div class="stats-row">
+          <div class="stat-card"><div class="stat-num">4</div><div class="stat-label">Total Events</div></div>
+          <div class="stat-card"><div class="stat-num">8</div><div class="stat-label">Anggota Tim</div></div>
+          <div class="stat-card"><div class="stat-num">8</div><div class="stat-label">Foto Gallery</div></div>
+          <div class="stat-card"><div class="stat-num">3</div><div class="stat-label">Artikel Berita</div></div>
+        </div>
+        <div class="edit-block">
+          <div class="edit-block-header"><div class="edit-block-title">Aktivitas Terbaru</div></div>
+          <div class="edit-block-body" style="padding:0;">
+            <table class="tbl">
+              <thead><tr><th>Waktu</th><th>Aktivitas</th><th>User</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>Baru saja</td><td>Login ke admin panel</td><td>Super Admin</td><td><span class="badge badge-green">Aktif</span></td></tr>
+                <tr><td>1 jam lalu</td><td>Event baru: PUFA Law Gala Night 2026</td><td>Admin</td><td><span class="badge badge-green">Berhasil</span></td></tr>
+                <tr><td>3 jam lalu</td><td>Anggota tim diperbarui</td><td>Admin</td><td><span class="badge badge-green">Berhasil</span></td></tr>
+                <tr><td>Kemarin</td><td>Artikel: Annual Report 2026 dipublikasikan</td><td>Editor</td><td><span class="badge badge-gold">Pending</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+          <div class="edit-block">
+            <div class="edit-block-header"><div class="edit-block-title">Navigasi Cepat</div></div>
+            <div class="edit-block-body" style="display:flex;flex-wrap:wrap;gap:10px;">
+              <button class="btn-add" onclick="showPanel('panel-home',document.querySelectorAll('.nav-btn')[1])">Edit Home</button>
+              <button class="btn-add" onclick="showPanel('panel-events',document.querySelectorAll('.nav-btn')[3])">Tambah Event</button>
+              <button class="btn-add" onclick="showPanel('panel-news',document.querySelectorAll('.nav-btn')[6])">Tulis Berita</button>
+              <button class="btn-add" onclick="showPanel('panel-team',document.querySelectorAll('.nav-btn')[5])">Edit Tim</button>
+              <button class="btn-add" onclick="showPanel('panel-gallery',document.querySelectorAll('.nav-btn')[4])">Upload Foto</button>
+              <button class="btn-add" onclick="showPanel('panel-contact',document.querySelectorAll('.nav-btn')[7])">Edit Kontak</button>
+            </div>
+          </div>
+          <div class="edit-block">
+            <div class="edit-block-header"><div class="edit-block-title">Status Halaman</div></div>
+            <div class="edit-block-body" style="padding:0;">
+              <table class="tbl">
+                <thead><tr><th>Halaman</th><th>Status</th></tr></thead>
+                <tbody>
+                  <tr><td>Home</td><td><span class="badge badge-green">Aktif</span></td></tr>
+                  <tr><td>About</td><td><span class="badge badge-green">Aktif</span></td></tr>
+                  <tr><td>Events</td><td><span class="badge badge-green">Aktif</span></td></tr>
+                  <tr><td>Gallery</td><td><span class="badge badge-green">Aktif</span></td></tr>
+                  <tr><td>Team</td><td><span class="badge badge-green">Aktif</span></td></tr>
+                  <tr><td>News</td><td><span class="badge badge-green">Aktif</span></td></tr>
+                  <tr><td>Contact Us</td><td><span class="badge badge-green">Aktif</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== HOME ===== -->
+      <div class="panel" id="panel-home">
+        <!-- Hero Section -->
+        <div class="edit-block">
+          <div class="edit-block-header">
+            <div class="edit-block-title">Hero Section</div>
+            <button class="btn-save" onclick="saveSection('Hero Home')">Simpan</button>
+          </div>
+          <div class="edit-block-body">
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Eyebrow Text</label>
+                <input type="text" class="form-input" value="PUFA Law Collection 2026" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Sub Text</label>
+                <input type="text" class="form-input" value="Excellence in Law. Elevate Every Case." />
+              </div>
+              <div class="form-group form-full">
+                <label class="form-label">Judul Hero (gunakan | untuk baris baru)</label>
+                <input type="text" class="form-input" value="THE GOLDEN | HOUR | COLLECTION" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Teks Tombol 1</label>
+                <input type="text" class="form-input" value="JELAJAHI EVENTS" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Teks Tombol 2</label>
+                <input type="text" class="form-input" value="LIHAT GALLERY" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="edit-block">
+          <div class="edit-block-header">
+            <div class="edit-block-title">Statistik Hero</div>
+            <button class="btn-save" onclick="saveSection('Statistik Home')">Simpan</button>
+          </div>
+          <div class="edit-block-body">
+            <div class="form-grid-3">
+              <div class="form-group">
+                <label class="form-label">Angka 1</label>
+                <input type="text" class="form-input" value="8+" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Label 1</label>
+                <input type="text" class="form-input" value="Tahun Berdiri" />
+              </div>
+              <div style="grid-column:3;display:flex;align-items:flex-end;">
+                <span style="font-size:11px;color:var(--text-light);">Stat 1</span>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Angka 2</label>
+                <input type="text" class="form-input" value="120+" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Label 2</label>
+                <input type="text" class="form-input" value="Events Sukses" />
+              </div>
+              <div></div>
+              <div class="form-group">
+                <label class="form-label">Angka 3</label>
+                <input type="text" class="form-input" value="5K+" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Label 3</label>
+                <input type="text" class="form-input" value="Anggota" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="edit-block">
+          <div class="edit-block-header">
+            <div class="edit-block-title">CTA Banner</div>
+            <button class="btn-save" onclick="saveSection('CTA Home')">Simpan</button>
+          </div>
+          <div class="edit-block-body">
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Eyebrow</label>
+                <input type="text" class="form-input" value="Bergabunglah Bersama Kami" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Teks Tombol CTA</label>
+                <input type="text" class="form-input" value="HUBUNGI KAMI SEKARANG" />
+              </div>
+              <div class="form-group form-full">
+                <label class="form-label">Judul CTA</label>
+                <input type="text" class="form-input" value="Jadilah Bagian dari Keluarga PUFA Law" />
+              </div>
+              <div class="form-group form-full">
+                <label class="form-label">Deskripsi CTA</label>
+                <textarea class="form-textarea" style="min-height:70px;">Bersama kami, setiap momen menjadi kenangan yang tak terlupakan.</textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== ABOUT ===== -->
+      <div class="panel" id="panel-about">
+        <div class="edit-block">
+          <div class="edit-block-header">
+            <div class="edit-block-title">Konten Utama About</div>
+            <button class="btn-save" onclick="saveSection('About')">Simpan</button>
+          </div>
+          <div class="edit-block-body">
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Tahun Berdiri (Badge)</label>
+                <input type="text" class="form-input" value="8+" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Label Badge</label>
+                <input type="text" class="form-input" value="YEARS OF EXCELLENCE" />
+              </div>
+              <div class="form-group form-full">
+                <label class="form-label">Quote / Tagline</label>
+                <input type="text" class="form-input" value='"Setiap kasus adalah kepercayaan. Kami menjaganya dengan integritas."' />
+              </div>
+              <div class="form-group form-full">
+                <label class="form-label">Paragraf 1</label>
+                <textarea class="form-textarea">PUFA Law didirikan pada tahun 2018 dengan visi sederhana namun kuat: menghadirkan layanan hukum yang tidak hanya kompeten secara teknis, tetapi juga bermakna bagi setiap anggota dan klien yang kami layani.</textarea>
+              </div>
+              <div class="form-group form-full">
+                <label class="form-label">Paragraf 2</label>
+                <textarea class="form-textarea">Kami percaya bahwa keunggulan hukum bukan sekadar tentang menang atau kalah, melainkan tentang perhatian terhadap detail, ketulusan dalam advokasi, dan keadilan yang terukir dalam setiap putusan.</textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Values -->
+        <div class="edit-block">
+          <div class="edit-block-header">
+            <div class="edit-block-title">Nilai-Nilai (Values)</div>
+            <button class="btn-save" onclick="saveSection('Values About')">Simpan</button>
+          </div>
+          <div class="edit-block-body">
+            <div class="form-grid">
+              <div class="form-group"><label class="form-label">Nilai 1 - Nama</label><input type="text" class="form-input" value="Integritas" /></div>
+              <div class="form-group"><label class="form-label">Nilai 1 - Deskripsi</label><input type="text" class="form-input" value="Standar etika tertinggi dalam setiap aspek pelaksanaan tugas dan pelayanan hukum." /></div>
+              <div class="form-group"><label class="form-label">Nilai 2 - Nama</label><input type="text" class="form-input" value="Keunggulan" /></div>
+              <div class="form-group"><label class="form-label">Nilai 2 - Deskripsi</label><input type="text" class="form-input" value="Komitmen pada kualitas yang tak tertandingi dalam setiap kasus yang kami tangani." /></div>
+              <div class="form-group"><label class="form-label">Nilai 3 - Nama</label><input type="text" class="form-input" value="Komunitas" /></div>
+              <div class="form-group"><label class="form-label">Nilai 3 - Deskripsi</label><input type="text" class="form-input" value="Membangun jaringan hukum yang kuat dan bermakna antar anggota dan mitra." /></div>
+              <div class="form-group"><label class="form-label">Nilai 4 - Nama</label><input type="text" class="form-input" value="Inovasi" /></div>
+              <div class="form-group"><label class="form-label">Nilai 4 - Deskripsi</label><input type="text" class="form-input" value="Selalu menghadirkan pendekatan hukum segar yang adaptif terhadap perubahan zaman." /></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="edit-block">
+          <div class="edit-block-header">
+            <div class="edit-block-title">Timeline / Milestones</div>
+            <button class="btn-save" onclick="saveSection('Timeline About')">Simpan</button>
+          </div>
+          <div class="edit-block-body" id="timelineList">
+            <div class="timeline-item" style="display:grid;grid-template-columns:120px 1fr auto;gap:12px;align-items:center;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);">
+              <input type="text" class="form-input" value="2018" placeholder="Tahun" />
+              <input type="text" class="form-input" value="PUFA Law resmi berdiri dengan 25 anggota founding member." placeholder="Deskripsi" />
+              <button class="btn-del" onclick="this.closest('.timeline-item').remove()">Hapus</button>
+            </div>
+            <div class="timeline-item" style="display:grid;grid-template-columns:120px 1fr auto;gap:12px;align-items:center;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);">
+              <input type="text" class="form-input" value="2020" placeholder="Tahun" />
+              <input type="text" class="form-input" value="Gala Night pertama sukses digelar, dihadiri 300+ tamu." placeholder="Deskripsi" />
+              <button class="btn-del" onclick="this.closest('.timeline-item').remove()">Hapus</button>
+            </div>
+            <div class="timeline-item" style="display:grid;grid-template-columns:120px 1fr auto;gap:12px;align-items:center;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);">
+              <input type="text" class="form-input" value="2022" placeholder="Tahun" />
+              <input type="text" class="form-input" value="Ekspansi ke 5 kota besar di Indonesia, 1000+ anggota aktif." placeholder="Deskripsi" />
+              <button class="btn-del" onclick="this.closest('.timeline-item').remove()">Hapus</button>
+            </div>
+            <div class="timeline-item" style="display:grid;grid-template-columns:120px 1fr auto;gap:12px;align-items:center;margin-bottom:12px;">
+              <input type="text" class="form-input" value="2026" placeholder="Tahun" />
+              <input type="text" class="form-input" value="Kini hadir secara digital, 5000+ anggota aktif nationwide." placeholder="Deskripsi" />
+              <button class="btn-del" onclick="this.closest('.timeline-item').remove()">Hapus</button>
+            </div>
+          </div>
+          <div style="margin-top:16px;">
+            <button class="btn-add" onclick="addTimeline()">+ Tambah Milestone</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== EVENTS ===== -->
+      <div class="panel" id="panel-events">
+        <div class="edit-block">
+          <div class="edit-block-header">
+            <div class="edit-block-title">Daftar Events</div>
+            <button class="btn-add" onclick="openModal('modalEvent','Tambah Event Baru')">+ Tambah Event</button>
+          </div>
+          <div class="edit-block-body" style="padding:0;">
+            <table class="tbl" id="eventsTable">
+              <thead><tr><th>Nama Event</th><th>Tanggal</th><th>Lokasi</th><th>Kategori</th><th>Status</th><th>Aksi</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td>PUFA Law Gala Night 2026</td>
+                  <td>15 Jul 2026</td>
+                  <td>Ballroom Hotel Mulia, Jakarta</td>
+                  <td>Gala Dinner</td>
+                  <td><span class="badge badge-gold">Upcoming</span></td>
+                  <td><div class="tbl-actions"><button class="btn-edit" onclick="openModal('modalEvent','Edit Event')">Edit</button><button class="btn-del">Hapus</button></div></td>
+                </tr>
+                <tr>
+                  <td>Grand Legal Seminar Series 2026</td>
+                  <td>22 Agt 2026</td>
+                  <td>JCC Senayan, Jakarta</td>
+                  <td>Seminar</td>
+                  <td><span class="badge badge-gold">Upcoming</span></td>
+                  <td><div class="tbl-actions"><button class="btn-edit" onclick="openModal('modalEvent','Edit Event')">Edit</button><button class="btn-del">Hapus</button></div></td>
+                </tr>
+                <tr>
+                  <td>Legal Art Exhibition 2025</td>
+                  <td>10 Des 2025</td>
+                  <td>Museum Nasional, Jakarta</td>
+                  <td>Exhibition</td>
+                  <td><span class="badge badge-red">Selesai</span></td>
+                  <td><div class="tbl-actions"><button class="btn-edit" onclick="openModal('modalEvent','Edit Event')">Edit</button><button class="btn-del">Hapus</button></div></td>
+                </tr>
+                <tr>
+                  <td>Legal Writing Masterclass</td>
+                  <td>05 Jun 2025</td>
+                  <td>Studio PUFA Law, Jakarta</td>
+                  <td>Workshop</td>
+                  <td><span class="badge badge-red">Selesai</span></td>
+                  <td><div class="tbl-actions"><button class="btn-edit" onclick="openModal('modalEvent','Edit Event')">Edit</button><button class="btn-del">Hapus</button></div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Panitia -->
+        <div class="edit-block">
+          <div class="edit-block-header">
+            <div class="edit-block-title">Panitia Events</div>
+            <button class="btn-add" onclick="openModal('modalPanitia','Tambah Panitia')">+ Tambah Panitia</button>
+          </div>
+          <div class="edit-block-body" style="padding:0;">
+            <table class="tbl">
+              <thead><tr><th>Nama</th><th>Jabatan</th><th>Divisi</th><th>Event</th><th>Aksi</th></tr></thead>
+              <tbody>
+                <tr><td>Budi Santoso</td><td>Ketua Panitia</td><td>Koordinasi Umum</td><td>Gala Night 2026</td><td><div class="tbl-actions"><button class="btn-edit">Edit</button><button class="btn-del">Hapus</button></div></td></tr>
+                <tr><td>Siti Rahayu</td><td>Wakil Ketua</td><td>Koordinasi Umum</td><td>Gala Night 2026</td><td><div class="tbl-actions"><button class="btn-edit">Edit</button><button class="btn-del">Hapus</button></div></td></tr>
+                <tr><td>Rizki Pratama</td><td>Ketua Panitia</td><td>Koordinasi Umum</td><td>Legal Seminar</td><td><div class="tbl-actions"><button class="btn-edit">Edit</button><button class="btn-del">Hapus</button></div></td></tr>
+                <tr><td>Dewi Lestari</td><td>Koordinator Humas</td><td>Divisi Humas</td><td>Gala Night 2026</td><td><div class="tbl-actions"><button class="btn-edit">Edit</button><button class="btn-del">Hapus</button></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== GALLERY ===== -->
+      <div class="panel" id="panel-gallery">
+        <div class="edit-block">
+          <div class="edit-block-header">
+            <div class="edit-block-title">Kelola Foto Gallery</div>
+            <button class="btn-add" onclick="openModal('modalGallery','Upload Foto Baru')">+ Upload Foto</button>
+          </div>
+          <div class="edit-block-body">
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;" id="galleryGrid">
+              <div class="gallery-admin-card" style="position:relative;">
+                <div style="background:linear-gradient(135deg,#f0e8d0,#C9A84C);height:140px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:700;color:var(--dark);letter-spacing:2px;">LEGAL ART</div>
+                <div style="padding:10px;border:1px solid var(--border);border-top:none;">
+                  <div style="font-size:11px;font-weight:700;color:var(--dark);margin-bottom:4px;">Legal Collection Shoot</div>
+                  <div style="font-size:10px;color:var(--text-light);">Kategori: Events</div>
+                  <div style="display:flex;gap:6px;margin-top:8px;"><button class="btn-edit" style="flex:1;">Edit</button><button class="btn-del" style="flex:1;">Hapus</button></div>
+                </div>
+              </div>
+              <div class="gallery-admin-card" style="position:relative;">
+                <div style="background:linear-gradient(135deg,#8B1A2B,#C9A84C);height:140px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:700;color:var(--white);letter-spacing:2px;">GALA NIGHT</div>
+                <div style="padding:10px;border:1px solid var(--border);border-top:none;">
+                  <div style="font-size:11px;font-weight:700;color:var(--dark);margin-bottom:4px;">Gala Night 2025</div>
+                  <div style="font-size:10px;color:var(--text-light);">Kategori: Events</div>
+                  <div style="display:flex;gap:6px;margin-top:8px;"><button class="btn-edit" style="flex:1;">Edit</button><button class="btn-del" style="flex:1;">Hapus</button></div>
+                </div>
+              </div>
+              <div class="gallery-admin-card" style="position:relative;">
+                <div style="background:linear-gradient(135deg,#2C2420,#8B6914);height:140px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:700;color:var(--gold-light);letter-spacing:2px;">SEMINAR</div>
+                <div style="padding:10px;border:1px solid var(--border);border-top:none;">
+                  <div style="font-size:11px;font-weight:700;color:var(--dark);margin-bottom:4px;">Legal Seminar Series</div>
+                  <div style="font-size:10px;color:var(--text-light);">Kategori: Seminar</div>
+                  <div style="display:flex;gap:6px;margin-top:8px;"><button class="btn-edit" style="flex:1;">Edit</button><button class="btn-del" style="flex:1;">Hapus</button></div>
+                </div>
+              </div>
+              <!-- Upload New -->
+              <div onclick="openModal('modalGallery','Upload Foto Baru')" style="border:2px dashed var(--border);height:200px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;cursor:pointer;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(201,168,76,0.3)'">
+                <div style="font-size:32px;color:var(--text-light);">+</div>
+                <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:var(--text-light);">UPLOAD FOTO</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gallery Filters -->
+        <div class="edit-block">
+          <div class="edit-block-header">
+            <div class="edit-block-title">Kelola Filter Kategori</div>
+            <button class="btn-save" onclick="saveSection('Filter Gallery')">Simpan</button>
+          </div>
+          <div class="edit-block-body">
+            <div style="display:flex;gap:10px;flex-wrap:wrap;" id="filterList">
+              <div style="display:flex;gap:6px;align-items:center;background:var(--off-white);border:1px solid var(--border);padding:6px 12px;">
+                <input type="text" class="form-input" value="Semua" style="width:120px;padding:4px 8px;" />
+                <button class="btn-del" style="padding:4px 8px;">X</button>
+              </div>
+              <div style="display:flex;gap:6px;align-items:center;background:var(--off-white);border:1px solid var(--border);padding:6px 12px;">
+                <input type="text" class="form-input" value="Events" style="width:120px;padding:4px 8px;" />
+                <button class="btn-del" style="padding:4px 8px;">X</button>
+              </div>
+              <div style="display:flex;gap:6px;align-items:center;background:var(--off-white);border:1px solid var(--border);padding:6px 12px;">
+                <input type="text" class="form-input" value="Seminar" style="width:120px;padding:4px 8px;" />
+                <button class="btn-del" style="padding:4px 8px;">X</button>
+              </div>
+              <div style="display:flex;gap:6px;align-items:center;background:var(--off-white);border:1px solid var(--border);padding:6px 12px;">
+                <input type="text" class="form-input" value="Workshop" style="width:120px;padding:4px 8px;" />
+                <button class="btn-del" style="padding:4px 8px;">X</button>
+              </div>
+            </div>
+            <button class="btn-add" style="margin-top:12px;" onclick="addFilter()">+ Tambah Filter</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== TEAM ===== -->
+      <div class="panel" id="panel-team">
+        <!-- Featured Leader -->
+        <div class="edit-block">
+          <div class="edit-block-header">
+            <div class="edit-block-title">Pemimpin Utama (Featured)</div>
+            <button class="btn-save" onclick="saveSection('Featured Leader')">Simpan</button>
+          </div>
+          <div class="edit-block-body">
+            <div class="form-grid">
+              <div class="form-group"><label class="form-label">Nama Lengkap</label><input type="text" class="form-input" value="Ayu Maharani" /></div>
+              <div class="form-group"><label class="form-label">Jabatan</label><input type="text" class="form-input" value="Ketua Umum & Founder" /></div>
+              <div class="form-group form-full"><label class="form-label">Biografi</label><textarea class="form-textarea">Ayu Maharani mendirikan PUFA Law dengan visi menciptakan komunitas hukum yang inklusif namun tetap profesional. Dengan pengalaman 15+ tahun di bidang hukum dan advokasi, beliau membawa PUFA Law menjadi organisasi hukum terkemuka di Indonesia.</textarea></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Team Members -->
+        <div class="edit-block">
+          <div class="edit-block-header">
+            <div class="edit-block-title">Anggota Tim</div>
+            <button class="btn-add" onclick="openModal('modalTeam','Tambah Anggota Tim')">+ Tambah Anggota</button>
+          </div>
+          <div class="edit-block-body" style="padding:0;">
+            <table class="tbl" id="teamTable">
+              <thead><tr><th>Nama</th><th>Jabatan</th><th>Departemen</th><th>Status</th><th>Aksi</th></tr></thead>
+              <tbody>
+                <tr><td>Reza Firmansyah</td><td>Creative Director</td><td>Divisi Kreatif & Desain</td><td><span class="badge badge-green">Aktif</span></td><td><div class="tbl-actions"><button class="btn-edit" onclick="openModal('modalTeam','Edit Anggota')">Edit</button><button class="btn-del">Hapus</button></div></td></tr>
+                <tr><td>Indah Permata</td><td>Head of Events</td><td>Divisi Event & Produksi</td><td><span class="badge badge-green">Aktif</span></td><td><div class="tbl-actions"><button class="btn-edit" onclick="openModal('modalTeam','Edit Anggota')">Edit</button><button class="btn-del">Hapus</button></div></td></tr>
+                <tr><td>Hendra Gunawan</td><td>CFO</td><td>Divisi Keuangan</td><td><span class="badge badge-green">Aktif</span></td><td><div class="tbl-actions"><button class="btn-edit" onclick="openModal('modalTeam','Edit Anggota')">Edit</button><button class="btn-del">Hapus</button></div></td></tr>
+                <tr><td>Dewi Lestari</td><td>Head of PR</td><td>Divisi Humas & Media</td><td><span class="badge badge-green">Aktif</span></td><td><div class="tbl-actions"><button class="btn-edit" onclick="openModal('modalTeam','Edit Anggota')">Edit</button><button class="btn-del">Hapus</button></div></td></tr>
+                <tr><td>Rizki Pratama</td><td>Operations Manager</td><td>Divisi Operasional</td><td><span class="badge badge-green">Aktif</span></td><td><div class="tbl-actions"><button class="btn-edit" onclick="openModal('modalTeam','Edit Anggota')">Edit</button><button class="btn-del">Hapus</button></div></td></tr>
+                <tr><td>Maya Putri</td><td>Legal Director</td><td>Divisi Hukum & Advokasi</td><td><span class="badge badge-green">Aktif</span></td><td><div class="tbl-actions"><button class="btn-edit" onclick="openModal('modalTeam','Edit Anggota')">Edit</button><button class="btn-del">Hapus</button></div></td></tr>
+                <tr><td>Budi Santoso</td><td>Partnership Manager</td><td>Divisi Kemitraan</td><td><span class="badge badge-green">Aktif</span></td><td><div class="tbl-actions"><button class="btn-edit" onclick="openModal('modalTeam','Edit Anggota')">Edit</button><button class="btn-del">Hapus</button></div></td></tr>
+                <tr><td>Siti Rahayu</td><td>Member Relations</td><td>Divisi Keanggotaan</td><td><span class="badge badge-green">Aktif</span></td><td><div class="tbl-actions"><button class="btn-edit" onclick="openModal('modalTeam','Edit Anggota')">Edit</button><button class="btn-del">Hapus</button></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== NEWS ===== -->
+      <div class="panel" id="panel-news">
+        <div class="edit-block">
+          <div class="edit-block-header">
+            <div class="edit-block-title">Daftar Artikel & Berita</div>
+            <button class="btn-add" onclick="openModal('modalNews','Tulis Artikel Baru')">+ Tulis Artikel</button>
+          </div>
+          <div class="edit-block-body" style="padding:0;">
+            <table class="tbl">
+              <thead><tr><th>Judul</th><th>Kategori</th><th>Penulis</th><th>Tanggal</th><th>Status</th><th>Aksi</th></tr></thead>
+              <tbody id="newsTable">
+                <tr>
+                  <td>PUFA Law Annual Seminar 2026: Mendefinisikan Ulang Hukum Indonesia</td>
+                  <td>Hukum</td><td>Siti Rahayu</td><td>20 Mei 2026</td>
+                  <td><span class="badge badge-green">Published</span></td>
+                  <td><div class="tbl-actions"><button class="btn-edit" onclick="openModal('modalNews','Edit Artikel')">Edit</button><button class="btn-del">Hapus</button></div></td>
+                </tr>
+                <tr>
+                  <td>Koleksi Publikasi Eksklusif: The Golden Hour Series</td>
+                  <td>Hukum</td><td>Admin</td><td>15 Mei 2026</td>
+                  <td><span class="badge badge-green">Published</span></td>
+                  <td><div class="tbl-actions"><button class="btn-edit" onclick="openModal('modalNews','Edit Artikel')">Edit</button><button class="btn-del">Hapus</button></div></td>
+                </tr>
+                <tr>
+                  <td>PUFA Law Mencapai 5.000 Anggota Aktif</td>
+                  <td>Komunitas</td><td>Admin</td><td>5 Mei 2026</td>
+                  <td><span class="badge badge-gold">Draft</span></td>
+                  <td><div class="tbl-actions"><button class="btn-edit" onclick="openModal('modalNews','Edit Artikel')">Edit</button><button class="btn-del">Hapus</button></div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Featured Article -->
+        <div class="edit-block">
+          <div class="edit-block-header">
+            <div class="edit-block-title">Artikel Featured (Tampil di Atas)</div>
+            <button class="btn-save" onclick="saveSection('Featured Article')">Simpan</button>
+          </div>
+          <div class="edit-block-body">
+            <div class="form-grid">
+              <div class="form-group form-full"><label class="form-label">Judul Artikel Featured</label><input type="text" class="form-input" value="PUFA Law Annual Seminar 2026: Mendefinisikan Ulang Hukum Indonesia" /></div>
+              <div class="form-group"><label class="form-label">Kategori</label><input type="text" class="form-input" value="Hukum" /></div>
+              <div class="form-group"><label class="form-label">Penulis</label><input type="text" class="form-input" value="Siti Rahayu" /></div>
+              <div class="form-group"><label class="form-label">Tanggal Terbit</label><input type="date" class="form-input" value="2026-05-20" /></div>
+              <div class="form-group"><label class="form-label">Estimasi Baca</label><input type="text" class="form-input" value="5 menit baca" /></div>
+              <div class="form-group form-full"><label class="form-label">Ringkasan / Excerpt</label><textarea class="form-textarea">Seminar tahunan PUFA Law kembali hadir dengan lebih spektakuler dari sebelumnya. Tahun ini, menghadirkan 28 pembicara dari seluruh nusantara dan 5 nama internasional, menciptakan kolaborasi hukum yang memukau...</textarea></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== CONTACT ===== -->
+      <div class="panel" id="panel-contact">
+        <div class="edit-block">
+          <div class="edit-block-header">
+            <div class="edit-block-title">Informasi Kontak</div>
+            <button class="btn-save" onclick="saveSection('Kontak')">Simpan</button>
+          </div>
+          <div class="edit-block-body">
+            <div class="form-grid">
+              <div class="form-group form-full"><label class="form-label">Tagline Kontak</label><input type="text" class="form-input" value="Mari Wujudkan Tujuan Hukum Bersama PUFA Law" /></div>
+              <div class="form-group form-full"><label class="form-label">Deskripsi</label><textarea class="form-textarea" style="min-height:70px;">Kami siap membantu Anda merencanakan dan melaksanakan kebutuhan hukum Anda. Tim profesional PUFA Law selalu siap memberikan konsultasi dan solusi terbaik.</textarea></div>
+              <div class="form-group"><label class="form-label">Alamat</label><textarea class="form-textarea" style="min-height:60px;">Jl. Jenderal Sudirman No. 88, Jakarta Pusat, DKI Jakarta 10220</textarea></div>
+              <div class="form-group"><label class="form-label">Nomor Telepon</label><textarea class="form-textarea" style="min-height:60px;">+62 21 5555 7890
++62 812 3456 7890 (WhatsApp)</textarea></div>
+              <div class="form-group"><label class="form-label">Email</label><textarea class="form-textarea" style="min-height:60px;">hello@pufalaw.id
+events@pufalaw.id</textarea></div>
+              <div class="form-group"><label class="form-label">Jam Operasional</label><textarea class="form-textarea" style="min-height:60px;">Senin – Jumat: 09.00 – 18.00 WIB
+Sabtu: 10.00 – 15.00 WIB</textarea></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Options -->
+        <div class="edit-block">
+          <div class="edit-block-header">
+            <div class="edit-block-title">Opsi Dropdown Form Kontak</div>
+            <button class="btn-save" onclick="saveSection('Form Kontak')">Simpan</button>
+          </div>
+          <div class="edit-block-body">
+            <div id="contactOptions" style="display:flex;flex-direction:column;gap:10px;">
+              <div style="display:flex;gap:10px;align-items:center;">
+                <input type="text" class="form-input" value="Konsultasi Hukum" />
+                <button class="btn-del" onclick="this.closest('div').remove()">Hapus</button>
+              </div>
+              <div style="display:flex;gap:10px;align-items:center;">
+                <input type="text" class="form-input" value="Informasi Keanggotaan" />
+                <button class="btn-del" onclick="this.closest('div').remove()">Hapus</button>
+              </div>
+              <div style="display:flex;gap:10px;align-items:center;">
+                <input type="text" class="form-input" value="Kerjasama & Partnership" />
+                <button class="btn-del" onclick="this.closest('div').remove()">Hapus</button>
+              </div>
+              <div style="display:flex;gap:10px;align-items:center;">
+                <input type="text" class="form-input" value="Pertanyaan Umum" />
+                <button class="btn-del" onclick="this.closest('div').remove()">Hapus</button>
+              </div>
+            </div>
+            <button class="btn-add" style="margin-top:12px;" onclick="addContactOption()">+ Tambah Opsi</button>
+          </div>
+        </div>
+
+        <!-- Pesan Masuk -->
+        <div class="edit-block">
+          <div class="edit-block-header">
+            <div class="edit-block-title">Pesan Masuk</div>
+          </div>
+          <div class="edit-block-body" style="padding:0;">
+            <table class="tbl">
+              <thead><tr><th>Nama</th><th>Email</th><th>Keperluan</th><th>Tanggal</th><th>Status</th><th>Aksi</th></tr></thead>
+              <tbody>
+                <tr><td>Budi Prasetyo</td><td>budi@gmail.com</td><td>Konsultasi Hukum</td><td>01 Jun 2026</td><td><span class="badge badge-gold">Belum Dibaca</span></td><td><div class="tbl-actions"><button class="btn-edit">Baca</button><button class="btn-del">Hapus</button></div></td></tr>
+                <tr><td>Rina Kusuma</td><td>rina@yahoo.com</td><td>Informasi Keanggotaan</td><td>30 Mei 2026</td><td><span class="badge badge-green">Dibaca</span></td><td><div class="tbl-actions"><button class="btn-edit">Baca</button><button class="btn-del">Hapus</button></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== SETTINGS ===== -->
+      <div class="panel" id="panel-settings">
+        <div class="edit-block">
+          <div class="edit-block-header">
+            <div class="edit-block-title">Informasi Umum Situs</div>
+            <button class="btn-save" onclick="saveSection('Pengaturan Situs')">Simpan</button>
+          </div>
+          <div class="edit-block-body">
+            <div class="form-grid">
+              <div class="form-group"><label class="form-label">Nama Situs</label><input type="text" class="form-input" value="PUFA LAW" /></div>
+              <div class="form-group"><label class="form-label">Tagline</label><input type="text" class="form-input" value="Excellence in Law" /></div>
+              <div class="form-group"><label class="form-label">Email Utama</label><input type="email" class="form-input" value="hello@pufalaw.id" /></div>
+              <div class="form-group"><label class="form-label">Nomor WhatsApp</label><input type="text" class="form-input" value="+62 812 3456 7890" /></div>
+              <div class="form-group form-full"><label class="form-label">Copyright Text</label><input type="text" class="form-input" value="© 2026 PUFA Law. All Rights Reserved." /></div>
+            </div>
+          </div>
+        </div>
+        <div class="edit-block">
+          <div class="edit-block-header">
+            <div class="edit-block-title">Pengaturan Footer</div>
+            <button class="btn-save" onclick="saveSection('Footer')">Simpan</button>
+          </div>
+          <div class="edit-block-body">
+            <div class="form-grid">
+              <div class="form-group form-full"><label class="form-label">Deskripsi Footer</label><textarea class="form-textarea" style="min-height:70px;">Organisasi hukum terkemuka yang menghadirkan pengalaman eksklusif dan pelayanan profesional untuk setiap kebutuhan hukum Anda.</textarea></div>
+              <div class="form-group"><label class="form-label">Teks Kanan Footer</label><input type="text" class="form-input" value="Excellence in Law" /></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== USERS ===== -->
+      <div class="panel" id="panel-users">
+        <div class="edit-block">
+          <div class="edit-block-header">
+            <div class="edit-block-title">Pengguna Admin</div>
+            <button class="btn-add" onclick="openModal('modalUser','Tambah Admin Baru')">+ Tambah Admin</button>
+          </div>
+          <div class="edit-block-body" style="padding:0;">
+            <table class="tbl">
+              <thead><tr><th>Nama</th><th>Email</th><th>Role</th><th>Akses Terakhir</th><th>Status</th><th>Aksi</th></tr></thead>
+              <tbody>
+                <tr><td>Super Admin</td><td>admin@pufalaw.id</td><td><span class="badge badge-red">Super Admin</span></td><td>Hari ini</td><td><span class="badge badge-green">Aktif</span></td><td><button class="btn-edit" onclick="openModal('modalUser','Edit Admin')">Edit</button></td></tr>
+                <tr><td>Siti Rahayu</td><td>siti@pufalaw.id</td><td><span class="badge badge-gold">Editor</span></td><td>2 jam lalu</td><td><span class="badge badge-green">Aktif</span></td><td><div class="tbl-actions"><button class="btn-edit" onclick="openModal('modalUser','Edit Admin')">Edit</button><button class="btn-del">Hapus</button></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="edit-block">
+          <div class="edit-block-header">
+            <div class="edit-block-title">Ubah Password</div>
+            <button class="btn-save" onclick="saveSection('Password')">Simpan</button>
+          </div>
+          <div class="edit-block-body">
+            <div class="form-grid" style="max-width:500px;">
+              <div class="form-group"><label class="form-label">Password Lama</label><input type="password" class="form-input" placeholder="Password lama..." /></div>
+              <div class="form-group"><label class="form-label">Password Baru</label><input type="password" class="form-input" placeholder="Password baru..." /></div>
+              <div class="form-group form-full"><label class="form-label">Konfirmasi Password Baru</label><input type="password" class="form-input" placeholder="Ulangi password baru..." /></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end content -->
+  </div><!-- end main -->
+</div><!-- end layout -->
+</div><!-- end app -->
+
+<!-- ===== TOAST ===== -->
+<div id="toast">Perubahan berhasil disimpan!</div>
+
+<!-- ===== MODALS ===== -->
+
+<!-- Modal Event -->
+<div class="modal-overlay" id="modalEvent">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title" id="modalEventTitle">Tambah Event Baru</div>
+      <button class="modal-close" onclick="closeModal('modalEvent')">X</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group form-full"><label class="form-label">Nama Event</label><input type="text" class="form-input" placeholder="Nama event..." /></div>
+        <div class="form-group"><label class="form-label">Tanggal</label><input type="date" class="form-input" /></div>
+        <div class="form-group"><label class="form-label">Jam Mulai</label><input type="time" class="form-input" /></div>
+        <div class="form-group"><label class="form-label">Kategori</label><select class="form-select"><option>Gala Dinner</option><option>Seminar</option><option>Exhibition</option><option>Workshop</option><option>Konferensi</option></select></div>
+        <div class="form-group"><label class="form-label">Status</label><select class="form-select"><option>Upcoming</option><option>Selesai</option></select></div>
+        <div class="form-group form-full"><label class="form-label">Lokasi</label><input type="text" class="form-input" placeholder="Lokasi event..." /></div>
+        <div class="form-group form-full"><label class="form-label">Deskripsi</label><textarea class="form-textarea" placeholder="Deskripsi event..."></textarea></div>
+        <div class="form-group"><label class="form-label">Teks Tombol</label><input type="text" class="form-input" value="DAFTAR SEKARANG" /></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-del" onclick="closeModal('modalEvent')">Batal</button>
+      <button class="btn-save" onclick="saveModal('modalEvent')">Simpan Event</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Panitia -->
+<div class="modal-overlay" id="modalPanitia">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title">Tambah Panitia</div>
+      <button class="modal-close" onclick="closeModal('modalPanitia')">X</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Nama</label><input type="text" class="form-input" placeholder="Nama panitia..." /></div>
+        <div class="form-group"><label class="form-label">Jabatan</label><input type="text" class="form-input" placeholder="Jabatan..." /></div>
+        <div class="form-group"><label class="form-label">Divisi</label><input type="text" class="form-input" placeholder="Divisi..." /></div>
+        <div class="form-group"><label class="form-label">Event</label><select class="form-select"><option>PUFA Law Gala Night 2026</option><option>Grand Legal Seminar Series</option><option>Legal Art Exhibition 2025</option></select></div>
+        <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" placeholder="email@pufalaw.id" /></div>
+        <div class="form-group"><label class="form-label">No. HP</label><input type="text" class="form-input" placeholder="+62..." /></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-del" onclick="closeModal('modalPanitia')">Batal</button>
+      <button class="btn-save" onclick="saveModal('modalPanitia')">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Gallery -->
+<div class="modal-overlay" id="modalGallery">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title">Upload Foto Baru</div>
+      <button class="modal-close" onclick="closeModal('modalGallery')">X</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group" style="margin-bottom:16px;">
+        <label class="form-label">Upload Foto</label>
+        <div class="img-upload" onclick="document.getElementById('fileInput').click()">
+          <div style="font-size:28px;color:var(--text-light);">+</div>
+          <div class="img-upload-label">Klik untuk pilih foto</div>
+          <div style="font-size:10px;color:var(--text-light);">JPG, PNG, WebP — maks. 5MB</div>
+        </div>
+        <input type="file" id="fileInput" accept="image/*" style="display:none;" onchange="previewImg(this)" />
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Judul Foto</label><input type="text" class="form-input" placeholder="Judul foto..." /></div>
+        <div class="form-group"><label class="form-label">Kategori</label><select class="form-select"><option>Events</option><option>Seminar</option><option>Workshop</option><option>Team</option></select></div>
+        <div class="form-group form-full"><label class="form-label">Keterangan</label><input type="text" class="form-input" placeholder="Keterangan singkat foto..." /></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-del" onclick="closeModal('modalGallery')">Batal</button>
+      <button class="btn-save" onclick="saveModal('modalGallery')">Upload</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Team -->
+<div class="modal-overlay" id="modalTeam">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTeamTitle">Tambah Anggota Tim</div>
+      <button class="modal-close" onclick="closeModal('modalTeam')">X</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Nama Lengkap</label><input type="text" class="form-input" placeholder="Nama..." /></div>
+        <div class="form-group"><label class="form-label">Jabatan</label><input type="text" class="form-input" placeholder="Jabatan..." /></div>
+        <div class="form-group"><label class="form-label">Departemen / Divisi</label><input type="text" class="form-input" placeholder="Divisi..." /></div>
+        <div class="form-group"><label class="form-label">Status</label><select class="form-select"><option>Aktif</option><option>Tidak Aktif</option></select></div>
+        <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" placeholder="email@pufalaw.id" /></div>
+        <div class="form-group"><label class="form-label">LinkedIn</label><input type="text" class="form-input" placeholder="URL LinkedIn..." /></div>
+        <div class="form-group form-full"><label class="form-label">Bio Singkat</label><textarea class="form-textarea" placeholder="Bio singkat anggota..."></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-del" onclick="closeModal('modalTeam')">Batal</button>
+      <button class="btn-save" onclick="saveModal('modalTeam')">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal News -->
+<div class="modal-overlay" id="modalNews">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title" id="modalNewsTitle">Tulis Artikel Baru</div>
+      <button class="modal-close" onclick="closeModal('modalNews')">X</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group form-full"><label class="form-label">Judul Artikel</label><input type="text" class="form-input" placeholder="Judul artikel..." /></div>
+        <div class="form-group"><label class="form-label">Kategori</label><select class="form-select"><option>Hukum</option><option>Event</option><option>Komunitas</option><option>Pengumuman</option></select></div>
+        <div class="form-group"><label class="form-label">Penulis</label><input type="text" class="form-input" placeholder="Nama penulis..." /></div>
+        <div class="form-group"><label class="form-label">Tanggal Terbit</label><input type="date" class="form-input" /></div>
+        <div class="form-group"><label class="form-label">Status</label><select class="form-select"><option>Published</option><option>Draft</option></select></div>
+        <div class="form-group form-full"><label class="form-label">Ringkasan (Excerpt)</label><textarea class="form-textarea" placeholder="Ringkasan singkat artikel..."></textarea></div>
+        <div class="form-group form-full"><label class="form-label">Isi Artikel</label><textarea class="form-textarea" style="min-height:160px;" placeholder="Tulis isi artikel lengkap di sini..."></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-del" onclick="closeModal('modalNews')">Batal</button>
+      <button class="btn-save" onclick="saveModal('modalNews')">Simpan Artikel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal User -->
+<div class="modal-overlay" id="modalUser">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title" id="modalUserTitle">Tambah Admin Baru</div>
+      <button class="modal-close" onclick="closeModal('modalUser')">X</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Nama Lengkap</label><input type="text" class="form-input" placeholder="Nama..." /></div>
+        <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" placeholder="email@pufalaw.id" /></div>
+        <div class="form-group"><label class="form-label">Role</label><select class="form-select"><option>Editor</option><option>Admin</option><option>Super Admin</option></select></div>
+        <div class="form-group"><label class="form-label">Password</label><input type="password" class="form-input" placeholder="Password..." /></div>
+        <div class="form-group form-full"><label class="form-label">Konfirmasi Password</label><input type="password" class="form-input" placeholder="Ulangi password..." /></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-del" onclick="closeModal('modalUser')">Batal</button>
+      <button class="btn-save" onclick="saveModal('modalUser')">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const ADMIN_EMAIL = 'admin@pufalaw.id';
+const ADMIN_PASS  = 'pufalaw2026';
+
+// ===== LOGIN =====
+function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass  = document.getElementById('loginPass').value;
+  if (email === ADMIN_EMAIL && pass === ADMIN_PASS) {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    document.getElementById('adminName').textContent = 'Super Admin';
+  } else {
+    document.getElementById('loginError').style.display = 'block';
+  }
+}
+function doLogout() {
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('loginEmail').value = '';
+  document.getElementById('loginPass').value = '';
+  document.getElementById('loginError').style.display = 'none';
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') doLogin();
+});
+
+// ===== PANEL NAVIGATION =====
+const titles = {
+  dashboard: 'Dashboard Overview',
+  'panel-home': 'Edit Halaman Home',
+  'panel-about': 'Edit Halaman About',
+  'panel-events': 'Kelola Events',
+  'panel-gallery': 'Kelola Gallery',
+  'panel-team': 'Kelola Team',
+  'panel-news': 'Kelola News',
+  'panel-contact': 'Edit Contact Us',
+  'panel-settings': 'Pengaturan Situs',
+  'panel-users': 'Pengguna Admin',
+};
+function showPanel(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  document.getElementById('topbarTitle').textContent = titles[id] || id;
+}
+
+// ===== TOAST =====
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg || 'Perubahan berhasil disimpan!';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ===== SAVE =====
+function saveSection(name) {
+  showToast((name || 'Data') + ' berhasil disimpan!');
+}
+
+// ===== MODALS =====
+function openModal(id, title) {
+  const m = document.getElementById(id);
+  m.classList.add('open');
+  const t = document.getElementById(id + 'Title') || m.querySelector('.modal-title');
+  if (t && title) t.textContent = title;
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+function saveModal(id) {
+  closeModal(id);
+  showToast('Data berhasil disimpan!');
+}
+// close modal on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('open');
+  });
+});
+
+// ===== DYNAMIC ADDS =====
+function addTimeline() {
+  const list = document.getElementById('timelineList');
+  const div = document.createElement('div');
+  div.className = 'timeline-item';
+  div.style.cssText = 'display:grid;grid-template-columns:120px 1fr auto;gap:12px;align-items:center;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);';
+  div.innerHTML = `
+    <input type="text" class="form-input" placeholder="Tahun" />
+    <input type="text" class="form-input" placeholder="Deskripsi milestone..." />
+    <button class="btn-del" onclick="this.closest('.timeline-item').remove()">Hapus</button>
+  `;
+  list.appendChild(div);
+}
+
+function addFilter() {
+  const list = document.getElementById('filterList');
+  const div = document.createElement('div');
+  div.style.cssText = 'display:flex;gap:6px;align-items:center;background:var(--off-white);border:1px solid var(--border);padding:6px 12px;';
+  div.innerHTML = `
+    <input type="text" class="form-input" placeholder="Nama filter..." style="width:120px;padding:4px 8px;" />
+    <button class="btn-del" style="padding:4px 8px;" onclick="this.closest('div').remove()">X</button>
+  `;
+  list.appendChild(div);
+}
+
+function addContactOption() {
+  const list = document.getElementById('contactOptions');
+  const div = document.createElement('div');
+  div.style.cssText = 'display:flex;gap:10px;align-items:center;';
+  div.innerHTML = `
+    <input type="text" class="form-input" placeholder="Opsi baru..." />
+    <button class="btn-del" onclick="this.closest('div').remove()">Hapus</button>
+  `;
+  list.appendChild(div);
+}
+
+function previewImg(input) {
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const upload = input.closest('.form-group').querySelector('.img-upload');
+      upload.style.backgroundImage = `url(${e.target.result})`;
+      upload.style.backgroundSize = 'cover';
+      upload.style.backgroundPosition = 'center';
+      upload.innerHTML = '';
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+</script>
+</body>
+</html>
+<!-- DATA.JS must be loaded first -->
+<script src="data.js"></script>
+<script>
+// ===== OVERRIDE saveSection to write real data =====
+function saveSection(name) {
+  try {
+    if (name === 'Hero Home' || name === 'Statistik Home' || name === 'CTA Home') {
+      const h = PufaData.get('home');
+      const get = sel => { const el = document.querySelector(sel); return el ? el.value : ''; };
+      // Hero
+      h.eyebrow    = document.querySelectorAll('.edit-block')[0].querySelectorAll('.form-input')[0].value;
+      h.sub        = document.querySelectorAll('.edit-block')[0].querySelectorAll('.form-input')[1].value;
+      h.title      = document.querySelectorAll('.edit-block')[0].querySelectorAll('.form-input')[2].value;
+      h.btn1       = document.querySelectorAll('.edit-block')[0].querySelectorAll('.form-input')[3].value;
+      h.btn2       = document.querySelectorAll('.edit-block')[0].querySelectorAll('.form-input')[4].value;
+      // Stats
+      const sb = document.querySelectorAll('.edit-block')[1].querySelectorAll('.form-input');
+      h.stat1num=sb[0].value; h.stat1label=sb[1].value;
+      h.stat2num=sb[3].value; h.stat2label=sb[4].value;
+      h.stat3num=sb[6].value; h.stat3label=sb[7].value;
+      // CTA
+      const cb = document.querySelectorAll('.edit-block')[2].querySelectorAll('.form-input, .form-textarea');
+      h.ctaEyebrow=cb[0].value; h.ctaBtn=cb[1].value; h.ctaTitle=cb[2].value; h.ctaDesc=cb[3].value;
+      PufaData.set('home', h);
+    }
+
+    if (name === 'About') {
+      const a = PufaData.get('about');
+      const inputs = document.getElementById('panel-about').querySelectorAll('.form-input, .form-textarea');
+      a.badgeNum   = inputs[0].value;
+      a.badgeLabel = inputs[1].value;
+      a.quote      = inputs[2].value;
+      a.para1      = inputs[3].value;
+      a.para2      = inputs[4].value;
+      PufaData.set('about', a);
+    }
+
+    if (name === 'Values About') {
+      const a = PufaData.get('about');
+      const inputs = document.getElementById('panel-about').querySelectorAll('.edit-block:nth-child(2) .form-input');
+      a.values = [
+        { name: inputs[0].value, desc: inputs[1].value },
+        { name: inputs[2].value, desc: inputs[3].value },
+        { name: inputs[4].value, desc: inputs[5].value },
+        { name: inputs[6].value, desc: inputs[7].value },
+      ];
+      PufaData.set('about', a);
+    }
+
+    if (name === 'Timeline About') {
+      const a = PufaData.get('about');
+      const rows = document.getElementById('timelineList').querySelectorAll('.timeline-item');
+      a.timeline = Array.from(rows).map(r => {
+        const ins = r.querySelectorAll('input');
+        return { year: ins[0].value, desc: ins[1].value };
+      });
+      PufaData.set('about', a);
+    }
+
+    if (name === 'Featured Leader') {
+      const team = PufaData.get('team');
+      const inputs = document.getElementById('panel-team').querySelectorAll('.edit-block:first-child .form-input, .edit-block:first-child .form-textarea');
+      team.featured.name = inputs[0].value;
+      team.featured.role = inputs[1].value;
+      team.featured.bio  = inputs[2].value;
+      PufaData.set('team', team);
+    }
+
+    if (name === 'Featured Article') {
+      const news = PufaData.get('news');
+      const inputs = document.getElementById('panel-news').querySelectorAll('.edit-block:nth-child(2) .form-input, .edit-block:nth-child(2) .form-textarea, .edit-block:nth-child(2) input, .edit-block:nth-child(2) select');
+      news.featured.title    = inputs[0] ? inputs[0].value : news.featured.title;
+      news.featured.category = inputs[1] ? inputs[1].value : news.featured.category;
+      news.featured.author   = inputs[2] ? inputs[2].value : news.featured.author;
+      if(inputs[3]) news.featured.date = inputs[3].value;
+      if(inputs[4]) news.featured.readtime = inputs[4].value;
+      if(inputs[5]) news.featured.excerpt = inputs[5].value;
+      PufaData.set('news', news);
+    }
+
+    if (name === 'Kontak') {
+      const c = PufaData.get('contact');
+      const panel = document.getElementById('panel-contact');
+      const inputs = panel.querySelectorAll('.edit-block:first-child .form-input, .edit-block:first-child .form-textarea');
+      c.tagline = inputs[0].value;
+      c.desc    = inputs[1].value;
+      c.address = inputs[2].value;
+      c.phone   = inputs[3].value;
+      c.email   = inputs[4].value;
+      c.hours   = inputs[5].value;
+      PufaData.set('contact', c);
+    }
+
+    if (name === 'Form Kontak') {
+      const c = PufaData.get('contact');
+      const rows = document.getElementById('contactOptions').querySelectorAll('input[type=text]');
+      c.formOptions = Array.from(rows).map(r => r.value).filter(v => v.trim());
+      PufaData.set('contact', c);
+    }
+
+    if (name === 'Filter Gallery') {
+      const rows = document.getElementById('filterList').querySelectorAll('input[type=text]');
+      const filters = Array.from(rows).map(r => r.value).filter(v => v.trim());
+      PufaData.set('galleryFilters', filters);
+    }
+
+    if (name === 'Pengaturan Situs' || name === 'Footer') {
+      const s = PufaData.get('settings');
+      const inputs = document.getElementById('panel-settings').querySelectorAll('.form-input, .form-textarea');
+      s.siteName    = inputs[0] ? inputs[0].value : s.siteName;
+      s.tagline     = inputs[1] ? inputs[1].value : s.tagline;
+      s.emailUtama  = inputs[2] ? inputs[2].value : s.emailUtama;
+      s.whatsapp    = inputs[3] ? inputs[3].value : s.whatsapp;
+      s.copyright   = inputs[4] ? inputs[4].value : s.copyright;
+      s.footerDesc  = inputs[5] ? inputs[5].value : s.footerDesc;
+      s.footerRight = inputs[6] ? inputs[6].value : s.footerRight;
+      PufaData.set('settings', s);
+    }
+
+    if (name === 'Password') {
+      const oldP = document.querySelector('#panel-users input[type=password]:nth-child(1)');
+      showToast('Fitur ubah password memerlukan backend server.');
+      return;
+    }
+
+  } catch(e) { console.error(e); }
+
+  showToast((name || 'Data') + ' berhasil disimpan!');
+}
+
+// ===== SAVE MODAL with real data =====
+const _origSaveModal = saveModal;
+saveModal = function(id) {
+  if (id === 'modalEvent') {
+    const inputs = document.getElementById(id).querySelectorAll('.form-input, select');
+    const events = PufaData.get('events');
+    const newEv = {
+      id: Date.now(),
+      name:     inputs[0] ? inputs[0].value : '',
+      date:     inputs[1] ? inputs[1].value : '',
+      time:     inputs[2] ? inputs[2].value : '',
+      category: inputs[3] ? inputs[3].value : '',
+      status:   inputs[4] ? inputs[4].value : 'Upcoming',
+      location: inputs[5] ? inputs[5].value : '',
+      desc:     inputs[6] ? inputs[6].value : '',
+      btn:      inputs[7] ? inputs[7].value : 'DAFTAR SEKARANG',
+    };
+    if (newEv.name) { events.push(newEv); PufaData.set('events', events); }
+  }
+
+  if (id === 'modalPanitia') {
+    const inputs = document.getElementById(id).querySelectorAll('.form-input, select');
+    const panitia = PufaData.get('panitia');
+    const p = {
+      id:       Date.now(),
+      name:     inputs[0] ? inputs[0].value : '',
+      role:     inputs[1] ? inputs[1].value : '',
+      division: inputs[2] ? inputs[2].value : '',
+      event:    inputs[3] ? inputs[3].value : '',
+    };
+    if (p.name) { panitia.push(p); PufaData.set('panitia', panitia); }
+  }
+
+  if (id === 'modalTeam') {
+    const inputs = document.getElementById(id).querySelectorAll('.form-input, select, textarea');
+    const team = PufaData.get('team');
+    const m = {
+      id:     Date.now(),
+      name:   inputs[0] ? inputs[0].value : '',
+      role:   inputs[1] ? inputs[1].value : '',
+      dept:   inputs[2] ? inputs[2].value : '',
+      status: inputs[3] ? inputs[3].value : 'Aktif',
+    };
+    if (m.name) { team.members.push(m); PufaData.set('team', team); }
+  }
+
+  if (id === 'modalNews') {
+    const inputs = document.getElementById(id).querySelectorAll('.form-input, select, textarea');
+    const news = PufaData.get('news');
+    const a = {
+      id:       Date.now(),
+      title:    inputs[0] ? inputs[0].value : '',
+      category: inputs[1] ? inputs[1].value : '',
+      author:   inputs[2] ? inputs[2].value : '',
+      date:     inputs[3] ? inputs[3].value : new Date().toISOString().split('T')[0],
+      status:   inputs[4] ? inputs[4].value : 'Published',
+      excerpt:  inputs[5] ? inputs[5].value : '',
+      bg:       'linear-gradient(135deg,#f0e8d0,#C9A84C)',
+      label:    (inputs[1] ? inputs[1].value : 'NEWS').toUpperCase(),
+    };
+    if (a.title) { news.articles.unshift(a); PufaData.set('news', news); }
+  }
+
+  closeModal(id);
+  showToast('Data berhasil disimpan!');
+};
+
+// ===== MESSAGES in admin panel =====
+(function loadMessages(){
+  const panel = document.getElementById('panel-contact');
+  if(!panel) return;
+  const tbody = panel.querySelector('table:last-of-type tbody') || panel.querySelector('tbody');
+  if(!tbody) return;
+  const msgs = PufaData.get('messages') || [];
+  if(msgs.length > 0){
+    tbody.innerHTML = msgs.map(m=>`
+      <tr>
+        <td>${m.name}</td><td>${m.email}</td><td>${m.purpose}</td><td>${m.date}</td>
+        <td><span class="badge ${m.status==='Dibaca'?'badge-green':'badge-gold'}">${m.status}</span></td>
+        <td><div class="tbl-actions">
+          <button class="btn-edit" onclick="readMsg(${m.id})">Baca</button>
+          <button class="btn-del" onclick="deleteMsg(${m.id})">Hapus</button>
+        </div></td>
+      </tr>`).join('');
+  }
+})();
+
+window.readMsg = function(id){
+  const msgs = PufaData.get('messages');
+  const m = msgs.find(x=>x.id===id);
+  if(m){
+    m.status='Dibaca';
+    PufaData.set('messages', msgs);
+    alert('Dari: '+m.name+' ('+m.email+')\nKeperluan: '+m.purpose+'\nPesan:\n'+m.msg);
+  }
+};
+window.deleteMsg = function(id){
+  if(!confirm('Hapus pesan ini?')) return;
+  const msgs = PufaData.get('messages').filter(x=>x.id!==id);
+  PufaData.set('messages', msgs);
+  showToast('Pesan dihapus.');
+  location.reload();
+};
+</script>

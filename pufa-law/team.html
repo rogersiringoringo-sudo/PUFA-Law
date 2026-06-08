@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PUFA Law — Team</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .team-container { max-width:1200px;margin:0 auto;padding:60px 40px; }
+  .team-featured { background:linear-gradient(135deg,var(--dark),var(--dark-mid));padding:50px;display:grid;grid-template-columns:180px 1fr;gap:36px;align-items:center;border:1px solid var(--border);margin-bottom:50px; }
+  .team-featured-img { width:180px;height:180px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:700;color:var(--dark);border:3px solid var(--gold); }
+  .team-featured-name { font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:700;color:var(--white);margin-bottom:4px; }
+  .team-featured-role { font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:18px; }
+  .team-featured-bio { font-size:13px;color:rgba(255,255,255,0.65);line-height:1.85; }
+  .team-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:24px; }
+  .team-card { background:var(--white);border:1px solid var(--border);overflow:hidden;cursor:pointer;transition:all 0.3s; }
+  .team-card:hover { transform:translateY(-5px);box-shadow:0 16px 36px rgba(0,0,0,0.1); }
+  .team-img { height:220px;background:linear-gradient(135deg,var(--marble),var(--off-white));display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:700;color:var(--gold-dark);position:relative; }
+  .team-img-overlay { position:absolute;inset:0;background:rgba(201,168,76,0.9);opacity:0;display:flex;align-items:center;justify-content:center;gap:12px;transition:opacity 0.3s; }
+  .team-card:hover .team-img-overlay { opacity:1; }
+  .team-info { padding:18px;border-top:2px solid var(--gold); }
+  .team-name { font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--dark);margin-bottom:3px; }
+  .team-role { font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold); }
+  .team-dept { font-size:11px;color:var(--text-light);margin-top:3px; }
+  @media(max-width:900px){ .team-grid{grid-template-columns:repeat(2,1fr);} .team-featured{grid-template-columns:1fr;padding:28px;} }
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">PUFA <span>LAW</span></a>
+  <div class="nav-links">
+    <a href="index.html">HOME</a><a href="about.html">ABOUT</a>
+    <a href="events.html">EVENTS</a><a href="gallery.html">GALLERY</a>
+    <a href="team.html" class="active">TEAM</a><a href="news.html">NEWS</a><a href="contact.html">CONTACT US</a>
+  </div>
+  <div class="nav-actions"><a href="admin.html" style="text-decoration:none;"><button class="btn-admin">ADMIN</button></a></div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-content">
+    <h1 class="page-hero-title">Our <em>Team</em></h1>
+    <p class="page-hero-sub">The People Behind PUFA Law</p>
+    <div class="breadcrumb">Home <span>›</span> <span>Team</span></div>
+  </div>
+</div>
+
+<div class="team-container">
+  <div class="section-header" style="text-align:left;margin-bottom:32px;">
+    <div class="section-eyebrow">Pemimpin Kami</div>
+    <h2 class="section-title">Tim <em>PUFA Law</em></h2>
+    <div class="section-line" style="margin:16px 0 0;"></div>
+  </div>
+
+  <!-- Featured -->
+  <div class="team-featured" id="featuredBlock"></div>
+
+  <!-- Members -->
+  <div class="section-eyebrow" style="margin-bottom:20px;">Jajaran Tim Inti</div>
+  <div class="team-grid" id="teamGrid"></div>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div><div class="footer-brand-name">PUFA <span>LAW</span></div><p class="footer-desc" id="footerDesc"></p></div>
+    <div><div class="footer-col-title">Navigasi</div><ul class="footer-links"><li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="events.html">Events</a></li></ul></div>
+    <div><div class="footer-col-title">Lainnya</div><ul class="footer-links"><li><a href="gallery.html">Gallery</a></li><li><a href="news.html">News</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div><div class="footer-col-title">Kontak</div><ul class="footer-links" id="footerContact"></ul></div>
+  </div>
+  <div class="footer-bottom"><span id="footerCopy"></span><span id="footerRight"></span></div>
+</footer>
+
+<script src="data.js"></script>
+<script>
+(function(){
+  const team = PufaData.get('team');
+  const s = PufaData.get('settings');
+  const c = PufaData.get('contact');
+  const initials = name => name.split(' ').map(w=>w[0]).slice(0,2).join('');
+
+  // Featured
+  const f = team.featured;
+  document.getElementById('featuredBlock').innerHTML = `
+    <div class="team-featured-img">${initials(f.name)}</div>
+    <div>
+      <div class="team-featured-name">${f.name}</div>
+      <div class="team-featured-role">${f.role}</div>
+      <p class="team-featured-bio">${f.bio}</p>
+    </div>`;
+
+  // Members grid
+  document.getElementById('teamGrid').innerHTML = team.members.map(m=>`
+    <div class="team-card">
+      <div class="team-img">${initials(m.name)}
+        <div class="team-img-overlay"><span style="font-size:12px;font-weight:700;color:var(--dark);">Lihat Profil</span></div>
+      </div>
+      <div class="team-info">
+        <div class="team-name">${m.name}</div>
+        <div class="team-role">${m.role}</div>
+        <div class="team-dept">${m.dept}</div>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('footerDesc').textContent = s.footerDesc;
+  document.getElementById('footerCopy').textContent = s.copyright;
+  document.getElementById('footerRight').textContent = s.footerRight;
+  document.getElementById('footerContact').innerHTML = `<li><a>${c.email.split('\n')[0]}</a></li><li><a>${c.phone.split('\n')[0]}</a></li>`;
+})();
+</script>
+</body>
+</html>

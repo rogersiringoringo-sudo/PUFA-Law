@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PUFA Law — About</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .about-grid { max-width:1200px;margin:80px auto;padding:0 40px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center; }
+  .about-img-main { height:480px;background:linear-gradient(135deg,var(--off-white),var(--marble));border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--gold-dark);letter-spacing:4px;position:relative; }
+  .about-img-badge { position:absolute;bottom:-20px;right:-20px;width:120px;height:120px;background:var(--gold);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px; }
+  .about-img-badge strong { font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:var(--dark); }
+  .about-img-badge span { font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--dark-mid);line-height:1.3; }
+  .about-lead { font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400;font-style:italic;color:var(--crimson);line-height:1.4;margin-bottom:20px; }
+  .about-body { font-size:14px;color:var(--text-light);line-height:1.9;margin-bottom:16px; }
+  .about-values { display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:28px; }
+  .val-item { padding:18px;border:1px solid var(--border); }
+  .val-name { font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold-dark);margin-bottom:5px; }
+  .val-desc { font-size:12px;color:var(--text-light);line-height:1.6; }
+  .timeline-entry { display:flex;gap:24px;align-items:center;margin-bottom:28px; }
+  .tl-year { font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--gold);min-width:60px; }
+  .tl-dot { width:14px;height:14px;border-radius:50%;background:var(--gold);flex-shrink:0; }
+  .tl-desc { font-size:13px;color:rgba(255,255,255,0.7); }
+  @media(max-width:900px){ .about-grid{grid-template-columns:1fr;} .about-values{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">PUFA <span>LAW</span></a>
+  <div class="nav-links">
+    <a href="index.html">HOME</a><a href="about.html" class="active">ABOUT</a>
+    <a href="events.html">EVENTS</a><a href="gallery.html">GALLERY</a>
+    <a href="team.html">TEAM</a><a href="news.html">NEWS</a><a href="contact.html">CONTACT US</a>
+  </div>
+  <div class="nav-actions"><a href="admin.html" style="text-decoration:none;"><button class="btn-admin">ADMIN</button></a></div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-content">
+    <h1 class="page-hero-title">Tentang <em>PUFA Law</em></h1>
+    <p class="page-hero-sub">Our Story & Vision</p>
+    <div class="breadcrumb">Home <span>›</span> <span>About Us</span></div>
+  </div>
+</div>
+
+<div class="about-grid">
+  <div style="position:relative;">
+    <div class="about-img-main">PUFA LAW</div>
+    <div class="about-img-badge"><strong id="badgeNum"></strong><span id="badgeLabel"></span></div>
+  </div>
+  <div>
+    <div class="section-eyebrow">Tentang Kami</div>
+    <h2 class="section-title" style="text-align:left;margin-bottom:16px;">Kisah di Balik<br><em>PUFA Law</em></h2>
+    <div class="section-line" style="margin:0 0 24px 0;"></div>
+    <p class="about-lead" id="aboutQuote"></p>
+    <p class="about-body" id="aboutPara1"></p>
+    <p class="about-body" id="aboutPara2"></p>
+    <div class="about-values" id="valuesGrid"></div>
+  </div>
+</div>
+
+<div style="background:var(--dark);padding:80px 40px;">
+  <div style="max-width:800px;margin:0 auto;text-align:center;">
+    <div class="section-eyebrow" style="color:var(--gold);">Perjalanan Kami</div>
+    <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4vw,48px);font-weight:700;color:var(--white);margin-bottom:48px;">Milestones <em style="color:var(--gold-light);">PUFA Law</em></h2>
+    <div style="position:relative;">
+      <div style="position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--border);transform:translateX(-50%);"></div>
+      <div id="timelineContainer"></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div><div class="footer-brand-name">PUFA <span>LAW</span></div><p class="footer-desc" id="footerDesc"></p></div>
+    <div><div class="footer-col-title">Navigasi</div><ul class="footer-links"><li><a href="index.html">Home</a></li><li><a href="events.html">Events</a></li><li><a href="gallery.html">Gallery</a></li></ul></div>
+    <div><div class="footer-col-title">Lainnya</div><ul class="footer-links"><li><a href="team.html">Team</a></li><li><a href="news.html">News</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div><div class="footer-col-title">Kontak</div><ul class="footer-links" id="footerContact"></ul></div>
+  </div>
+  <div class="footer-bottom"><span id="footerCopy"></span><span id="footerRight"></span></div>
+</footer>
+
+<script src="data.js"></script>
+<script>
+(function(){
+  const a = PufaData.get('about');
+  const s = PufaData.get('settings');
+  const c = PufaData.get('contact');
+
+  document.getElementById('badgeNum').textContent = a.badgeNum;
+  document.getElementById('badgeLabel').textContent = a.badgeLabel;
+  document.getElementById('aboutQuote').textContent = a.quote;
+  document.getElementById('aboutPara1').textContent = a.para1;
+  document.getElementById('aboutPara2').textContent = a.para2;
+
+  // Values
+  document.getElementById('valuesGrid').innerHTML = a.values.map(v=>`
+    <div class="val-item"><div class="val-name">${v.name}</div><div class="val-desc">${v.desc}</div></div>`).join('');
+
+  // Timeline
+  document.getElementById('timelineContainer').innerHTML = a.timeline.map((t,i)=>`
+    <div style="display:flex;gap:24px;align-items:center;margin-bottom:28px;">
+      ${i%2===0 ? `<div style="flex:1;text-align:right;padding-right:20px;"><div class="tl-year">${t.year}</div><div class="tl-desc">${t.desc}</div></div><div class="tl-dot"></div><div style="flex:1;"></div>` : `<div style="flex:1;"></div><div class="tl-dot" style="background:var(--crimson);"></div><div style="flex:1;padding-left:20px;"><div class="tl-year">${t.year}</div><div class="tl-desc">${t.desc}</div></div>`}
+    </div>`).join('');
+
+  // Footer
+  document.getElementById('footerDesc').textContent = s.footerDesc;
+  document.getElementById('footerCopy').textContent = s.copyright;
+  document.getElementById('footerRight').textContent = s.footerRight;
+  document.getElementById('footerContact').innerHTML = c.email.split('\n').slice(0,1).map(v=>`<li><a>${v}</a></li>`).join('') + `<li><a>${c.phone.split('\n')[0]}</a></li>`;
+})();
+</script>
+</body>
+</html>

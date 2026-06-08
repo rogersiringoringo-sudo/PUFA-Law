@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PUFA Law — News</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .news-container { max-width:1200px;margin:0 auto;padding:60px 40px; }
+  .news-featured-wrap { display:grid;grid-template-columns:1.5fr 1fr;gap:32px;margin-bottom:50px; }
+  .news-feat-img { height:360px;background:linear-gradient(135deg,var(--dark),var(--crimson));display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--gold-light);letter-spacing:4px;position:relative;border:1px solid var(--border); }
+  .news-feat-label { position:absolute;top:20px;left:20px;background:var(--gold);padding:5px 14px;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--dark); }
+  .news-feat-body { display:flex;flex-direction:column;justify-content:center; }
+  .news-cat { font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:10px; }
+  .news-title { font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:var(--dark);line-height:1.3;margin-bottom:12px; }
+  .news-excerpt { font-size:13px;color:var(--text-light);line-height:1.85;margin-bottom:18px; }
+  .news-meta { font-size:11px;color:var(--text-light);display:flex;gap:16px;flex-wrap:wrap; }
+  .news-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:24px; }
+  .news-card { background:var(--white);border:1px solid var(--border);overflow:hidden;cursor:pointer;transition:all 0.3s; }
+  .news-card:hover { transform:translateY(-4px);box-shadow:0 12px 30px rgba(0,0,0,0.08); }
+  .news-img { height:180px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;letter-spacing:3px; }
+  .news-card-body { padding:20px; }
+  .news-card-title { font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--dark);line-height:1.3;margin-bottom:8px; }
+  .news-card-text { font-size:12px;color:var(--text-light);line-height:1.6; }
+  @media(max-width:900px){ .news-featured-wrap{grid-template-columns:1fr;} .news-grid{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">PUFA <span>LAW</span></a>
+  <div class="nav-links">
+    <a href="index.html">HOME</a><a href="about.html">ABOUT</a>
+    <a href="events.html">EVENTS</a><a href="gallery.html">GALLERY</a>
+    <a href="team.html">TEAM</a><a href="news.html" class="active">NEWS</a><a href="contact.html">CONTACT US</a>
+  </div>
+  <div class="nav-actions"><a href="admin.html" style="text-decoration:none;"><button class="btn-admin">ADMIN</button></a></div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-content">
+    <h1 class="page-hero-title">Berita & <em>Jurnal</em></h1>
+    <p class="page-hero-sub">News & Updates</p>
+    <div class="breadcrumb">Home <span>›</span> <span>News</span></div>
+  </div>
+</div>
+
+<div class="news-container">
+  <div class="section-header" style="text-align:left;margin-bottom:40px;">
+    <div class="section-eyebrow">Terbaru dari PUFA Law</div>
+    <h2 class="section-title">Berita & <em>Artikel</em></h2>
+    <div class="section-line" style="margin:16px 0 0;"></div>
+  </div>
+
+  <!-- Featured -->
+  <div class="news-featured-wrap" id="featuredNews"></div>
+
+  <!-- Articles -->
+  <div class="section-eyebrow" style="margin-bottom:20px;">Artikel Terbaru</div>
+  <div class="news-grid" id="newsGrid"></div>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div><div class="footer-brand-name">PUFA <span>LAW</span></div><p class="footer-desc" id="footerDesc"></p></div>
+    <div><div class="footer-col-title">Navigasi</div><ul class="footer-links"><li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="events.html">Events</a></li></ul></div>
+    <div><div class="footer-col-title">Lainnya</div><ul class="footer-links"><li><a href="team.html">Team</a></li><li><a href="gallery.html">Gallery</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div><div class="footer-col-title">Kontak</div><ul class="footer-links" id="footerContact"></ul></div>
+  </div>
+  <div class="footer-bottom"><span id="footerCopy"></span><span id="footerRight"></span></div>
+</footer>
+
+<script src="data.js"></script>
+<script>
+(function(){
+  const news = PufaData.get('news');
+  const s = PufaData.get('settings');
+  const c = PufaData.get('contact');
+  const fmtDate = d => new Date(d).toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+
+  // Featured
+  const f = news.featured;
+  document.getElementById('featuredNews').innerHTML = `
+    <div class="news-feat-img">PUFA LAW<div class="news-feat-label">FEATURED</div></div>
+    <div class="news-feat-body">
+      <div class="news-cat">${f.category}</div>
+      <div class="news-title">${f.title}</div>
+      <p class="news-excerpt">${f.excerpt}</p>
+      <div class="news-meta"><span>${fmtDate(f.date)}</span><span>${f.author}</span><span>${f.readtime}</span></div>
+      <button class="btn-primary" style="margin-top:20px;font-size:10px;padding:10px 24px;">BACA SELENGKAPNYA</button>
+    </div>`;
+
+  // Articles
+  document.getElementById('newsGrid').innerHTML = news.articles.filter(a=>a.status==='Published').map(a=>`
+    <div class="news-card">
+      <div class="news-img" style="background:${a.bg};color:${a.bg.includes('2C2420')?'var(--gold-light)':'var(--gold-dark)'};">${a.label}</div>
+      <div class="news-card-body">
+        <div class="news-cat">${a.category}</div>
+        <div class="news-card-title">${a.title}</div>
+        <div class="news-card-text">${a.excerpt}</div>
+        <div style="font-size:11px;color:var(--text-light);margin-top:10px;">${fmtDate(a.date)}</div>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('footerDesc').textContent = s.footerDesc;
+  document.getElementById('footerCopy').textContent = s.copyright;
+  document.getElementById('footerRight').textContent = s.footerRight;
+  document.getElementById('footerContact').innerHTML = `<li><a>${c.email.split('\n')[0]}</a></li><li><a>${c.phone.split('\n')[0]}</a></li>`;
+})();
+</script>
+</body>
+</html>

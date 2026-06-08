@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PUFA Law — Contact Us</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .contact-container { max-width:1200px;margin:0 auto;padding:60px 40px; }
+  .contact-grid { display:grid;grid-template-columns:1fr 1fr;gap:60px; }
+  .contact-tagline { font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:var(--dark);line-height:1.2;margin-bottom:18px; }
+  .contact-tagline em { font-style:italic;color:var(--crimson); }
+  .contact-text { font-size:13px;color:var(--text-light);line-height:1.85;margin-bottom:36px; }
+  .contact-items { display:flex;flex-direction:column;gap:22px; }
+  .contact-item { display:flex;gap:16px;align-items:flex-start; }
+  .contact-icon { width:46px;height:46px;background:var(--off-white);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:12px;font-weight:700;color:var(--gold-dark);letter-spacing:1px;flex-shrink:0; }
+  .contact-item-label { font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:4px; }
+  .contact-item-val { font-size:13px;color:var(--text);line-height:1.7; }
+  @media(max-width:900px){ .contact-grid{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">PUFA <span>LAW</span></a>
+  <div class="nav-links">
+    <a href="index.html">HOME</a><a href="about.html">ABOUT</a>
+    <a href="events.html">EVENTS</a><a href="gallery.html">GALLERY</a>
+    <a href="team.html">TEAM</a><a href="news.html">NEWS</a><a href="contact.html" class="active">CONTACT US</a>
+  </div>
+  <div class="nav-actions"><a href="admin.html" style="text-decoration:none;"><button class="btn-admin">ADMIN</button></a></div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-content">
+    <h1 class="page-hero-title">Hubungi <em>Kami</em></h1>
+    <p class="page-hero-sub">Get In Touch</p>
+    <div class="breadcrumb">Home <span>›</span> <span>Contact Us</span></div>
+  </div>
+</div>
+
+<div class="contact-container">
+  <div class="contact-grid">
+    <!-- Info -->
+    <div>
+      <div class="section-eyebrow">Kontak Kami</div>
+      <div class="contact-tagline" id="contactTagline"></div>
+      <p class="contact-text" id="contactDesc"></p>
+      <div class="contact-items" id="contactItems"></div>
+    </div>
+    <!-- Form -->
+    <div>
+      <div style="background:var(--white);border:1px solid var(--border);padding:40px;">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:var(--dark);margin-bottom:24px;">Kirim Pesan</div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Nama Lengkap</label><input type="text" class="form-input" id="msgName" placeholder="Nama Anda..." /></div>
+          <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" id="msgEmail" placeholder="email@anda.com" /></div>
+        </div>
+        <div class="form-group"><label class="form-label">Nomor Telepon</label><input type="text" class="form-input" id="msgPhone" placeholder="+62..." /></div>
+        <div class="form-group">
+          <label class="form-label">Keperluan</label>
+          <select class="form-input" id="msgPurpose" style="cursor:pointer;"></select>
+        </div>
+        <div class="form-group"><label class="form-label">Pesan</label><textarea class="form-input" id="msgText" style="min-height:110px;resize:vertical;" placeholder="Ceritakan kebutuhan Anda..."></textarea></div>
+        <button class="btn-primary" style="width:100%;font-size:11px;" onclick="submitMsg()">KIRIM PESAN</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div><div class="footer-brand-name">PUFA <span>LAW</span></div><p class="footer-desc" id="footerDesc"></p></div>
+    <div><div class="footer-col-title">Navigasi</div><ul class="footer-links"><li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="events.html">Events</a></li></ul></div>
+    <div><div class="footer-col-title">Lainnya</div><ul class="footer-links"><li><a href="team.html">Team</a></li><li><a href="gallery.html">Gallery</a></li><li><a href="news.html">News</a></li></ul></div>
+    <div><div class="footer-col-title">Kontak</div><ul class="footer-links" id="footerContact"></ul></div>
+  </div>
+  <div class="footer-bottom"><span id="footerCopy"></span><span id="footerRight"></span></div>
+</footer>
+
+<script src="data.js"></script>
+<script>
+(function(){
+  const c = PufaData.get('contact');
+  const s = PufaData.get('settings');
+
+  document.getElementById('contactTagline').innerHTML = c.tagline.replace('PUFA Law','<em>PUFA Law</em>');
+  document.getElementById('contactDesc').textContent = c.desc;
+
+  const infoItems = [
+    { icon:'LOC', label:'Alamat', val: c.address },
+    { icon:'TEL', label:'Telepon', val: c.phone },
+    { icon:'MAIL', label:'Email', val: c.email },
+    { icon:'JAM', label:'Jam Operasional', val: c.hours },
+  ];
+  document.getElementById('contactItems').innerHTML = infoItems.map(it=>`
+    <div class="contact-item">
+      <div class="contact-icon">${it.icon}</div>
+      <div><div class="contact-item-label">${it.label}</div><div class="contact-item-val">${it.val.replace(/\n/g,'<br>')}</div></div>
+    </div>`).join('');
+
+  // Form options
+  document.getElementById('msgPurpose').innerHTML = c.formOptions.map(o=>`<option>${o}</option>`).join('');
+
+  // Footer
+  document.getElementById('footerDesc').textContent = s.footerDesc;
+  document.getElementById('footerCopy').textContent = s.copyright;
+  document.getElementById('footerRight').textContent = s.footerRight;
+  document.getElementById('footerContact').innerHTML = `<li><a>${c.email.split('\n')[0]}</a></li><li><a>${c.phone.split('\n')[0]}</a></li>`;
+})();
+
+function submitMsg(){
+  const name = document.getElementById('msgName').value.trim();
+  const email = document.getElementById('msgEmail').value.trim();
+  const phone = document.getElementById('msgPhone').value.trim();
+  const purpose = document.getElementById('msgPurpose').value;
+  const msg = document.getElementById('msgText').value.trim();
+  if(!name || !email){ alert('Mohon isi nama dan email terlebih dahulu.'); return; }
+
+  // Save to localStorage
+  const messages = PufaData.get('messages') || [];
+  messages.unshift({ id: Date.now(), name, email, phone, purpose, msg, date: new Date().toISOString().split('T')[0], status:'Belum Dibaca' });
+  PufaData.set('messages', messages);
+
+  alert('Terima kasih, ' + name + '! Pesan Anda telah terkirim. Tim PUFA Law akan menghubungi Anda segera.');
+  ['msgName','msgEmail','msgPhone','msgText'].forEach(id=>document.getElementById(id).value='');
+}
+</script>
+</body>
+</html>

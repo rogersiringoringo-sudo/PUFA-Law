@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PUFA Law — Gallery</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .gallery-container { max-width:1200px;margin:0 auto;padding:60px 40px; }
+  .gallery-filters { display:flex;gap:8px;margin-bottom:32px;flex-wrap:wrap; }
+  .gfilter { font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:8px 20px;background:transparent;border:1px solid var(--border);cursor:pointer;transition:all 0.2s;color:var(--text); }
+  .gfilter.active,.gfilter:hover { background:var(--gold);color:var(--dark);border-color:var(--gold); }
+  .gallery-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:16px; }
+  .gallery-item { border:1px solid var(--border);overflow:hidden;cursor:pointer;position:relative;transition:all 0.3s;aspect-ratio:1; }
+  .gallery-item:hover { transform:scale(1.02);box-shadow:0 12px 30px rgba(0,0,0,0.12); }
+  .gallery-img { width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;letter-spacing:3px;color:rgba(255,255,255,0.75); }
+  .gallery-overlay { position:absolute;inset:0;background:linear-gradient(to top,rgba(26,20,16,0.8),transparent);opacity:0;transition:opacity 0.3s;display:flex;align-items:flex-end;padding:16px; }
+  .gallery-item:hover .gallery-overlay { opacity:1; }
+  .gallery-overlay-text { color:var(--white);font-size:12px;font-weight:600;letter-spacing:1px; }
+  @media(max-width:900px){ .gallery-grid{grid-template-columns:repeat(2,1fr);} }
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">PUFA <span>LAW</span></a>
+  <div class="nav-links">
+    <a href="index.html">HOME</a><a href="about.html">ABOUT</a>
+    <a href="events.html">EVENTS</a><a href="gallery.html" class="active">GALLERY</a>
+    <a href="team.html">TEAM</a><a href="news.html">NEWS</a><a href="contact.html">CONTACT US</a>
+  </div>
+  <div class="nav-actions"><a href="admin.html" style="text-decoration:none;"><button class="btn-admin">ADMIN</button></a></div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-content">
+    <h1 class="page-hero-title">Our <em>Gallery</em></h1>
+    <p class="page-hero-sub">Moments & Memories</p>
+    <div class="breadcrumb">Home <span>›</span> <span>Gallery</span></div>
+  </div>
+</div>
+
+<div class="gallery-container">
+  <div class="section-header" style="text-align:left;margin-bottom:32px;">
+    <div class="section-eyebrow">Koleksi Foto</div>
+    <h2 class="section-title">Momen <em>Berharga</em></h2>
+    <div class="section-line" style="margin:16px 0 0;"></div>
+  </div>
+  <div class="gallery-filters" id="filterBar"></div>
+  <div class="gallery-grid" id="galleryGrid"></div>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div><div class="footer-brand-name">PUFA <span>LAW</span></div><p class="footer-desc" id="footerDesc"></p></div>
+    <div><div class="footer-col-title">Navigasi</div><ul class="footer-links"><li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="events.html">Events</a></li></ul></div>
+    <div><div class="footer-col-title">Lainnya</div><ul class="footer-links"><li><a href="team.html">Team</a></li><li><a href="news.html">News</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div><div class="footer-col-title">Kontak</div><ul class="footer-links" id="footerContact"></ul></div>
+  </div>
+  <div class="footer-bottom"><span id="footerCopy"></span><span id="footerRight"></span></div>
+</footer>
+
+<script src="data.js"></script>
+<script>
+(function(){
+  const gallery = PufaData.get('gallery');
+  const filters = PufaData.get('galleryFilters');
+  const s = PufaData.get('settings');
+  const c = PufaData.get('contact');
+  let active = 'Semua';
+
+  function renderFilters(){
+    document.getElementById('filterBar').innerHTML = filters.map(f=>`
+      <div class="gfilter ${f===active?'active':''}" onclick="filterGallery('${f}',this)">${f}</div>`).join('');
+  }
+
+  function renderGallery(){
+    const items = active==='Semua' ? gallery : gallery.filter(g=>g.category===active);
+    document.getElementById('galleryGrid').innerHTML = items.map(g=>`
+      <div class="gallery-item">
+        <div class="gallery-img" style="background:${g.bg};">${g.label}</div>
+        <div class="gallery-overlay"><div class="gallery-overlay-text">${g.title}</div></div>
+      </div>`).join('');
+  }
+
+  window.filterGallery = function(cat, el){
+    active = cat;
+    document.querySelectorAll('.gfilter').forEach(f=>f.classList.remove('active'));
+    el.classList.add('active');
+    renderGallery();
+  };
+
+  renderFilters(); renderGallery();
+
+  document.getElementById('footerDesc').textContent = s.footerDesc;
+  document.getElementById('footerCopy').textContent = s.copyright;
+  document.getElementById('footerRight').textContent = s.footerRight;
+  document.getElementById('footerContact').innerHTML = `<li><a>${c.email.split('\n')[0]}</a></li><li><a>${c.phone.split('\n')[0]}</a></li>`;
+})();
+</script>
+</body>
+</html>
