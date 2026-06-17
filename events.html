@@ -39,12 +39,31 @@
 <nav>
   <a class="nav-logo" href="index.html">PUFA <span>LAW</span></a>
   <div class="nav-links">
-    <a href="index.html">HOME</a><a href="about.html">ABOUT</a>
-    <a href="events.html" class="active">EVENTS</a><a href="gallery.html">GALLERY</a>
-    <a href="team.html">TEAM</a><a href="news.html">NEWS</a><a href="contact.html">CONTACT US</a>
+    <a href="index.html">HOME</a>
+    <a href="about.html">ABOUT</a>
+    <a href="events.html" class="active">EVENTS</a>
+    <a href="gallery.html">GALLERY</a>
+    <a href="team.html">TEAM</a>
+    <a href="news.html">NEWS</a>
+    <a href="contact.html">CONTACT</a>
   </div>
-  <div class="nav-actions"><a href="admin.html" style="text-decoration:none;"><button class="btn-admin">ADMIN</button></a></div>
+  <div class="nav-actions">
+    <a href="admin.html" style="text-decoration:none;"><button class="btn-admin">ADMIN</button></a>
+    <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 </nav>
+<div class="nav-mobile-menu" id="mobileMenu">
+  <a href="index.html">HOME</a>
+  <a href="about.html">ABOUT</a>
+  <a href="events.html" class="active">EVENTS</a>
+  <a href="gallery.html">GALLERY</a>
+  <a href="team.html">TEAM</a>
+  <a href="news.html">NEWS</a>
+  <a href="contact.html">CONTACT</a>
+  <a href="admin.html" class="mobile-admin">ADMIN PANEL</a>
+</div>
 
 <div class="page-hero">
   <div class="page-hero-content">
@@ -63,7 +82,7 @@
   <div class="events-grid" id="eventsGrid"></div>
 
   <!-- PANITIA -->
-  <div style="margin-top:70px;">
+  <div style="margin-top:68px;">
     <div class="section-eyebrow">Struktur Kepanitiaan</div>
     <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(24px,3vw,38px);font-weight:700;color:var(--dark);margin-bottom:8px;">Panitia & <em style="font-style:italic;color:var(--crimson);">Penanggungjawab Event</em></h2>
     <p style="font-size:12px;color:var(--text-light);margin-bottom:24px;">Kenali para profesional yang bertanggung jawab dalam menyukseskan setiap event PUFA Law.</p>
@@ -144,6 +163,12 @@ function showPanitia(idx, el){
   document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
 }
+</script>
+
+<script>
+document.getElementById('hamburger').addEventListener('click', function(){
+  document.getElementById('mobileMenu').classList.toggle('open');
+});
 </script>
 </body>
 </html>

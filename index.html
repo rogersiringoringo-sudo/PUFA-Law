@@ -6,55 +6,194 @@
 <title>PUFA Law — Home</title>
 <link rel="stylesheet" href="style.css">
 <style>
+  /* HERO */
   .hero {
-    margin-top: 70px; min-height: calc(100vh - 70px);
-    background: linear-gradient(135deg, var(--off-white) 0%, var(--marble) 100%);
+    margin-top: 68px; min-height: calc(100vh - 68px);
+    background: linear-gradient(135deg, var(--dark) 0%, var(--crimson-deep) 45%, var(--crimson) 100%);
     position: relative; overflow: hidden;
     display: flex; align-items: center;
   }
   .hero::before {
     content: ''; position: absolute; inset: 0;
-    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C9A84C' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");
   }
-  .hero-border { position: absolute; inset: 20px; border: 1px solid var(--border); pointer-events: none; }
-  .hero-border::before, .hero-border::after { content: ''; position: absolute; width: 30px; height: 30px; }
-  .hero-border::before { top: -1px; left: -1px; border-top: 2px solid var(--gold); border-left: 2px solid var(--gold); }
-  .hero-border::after { bottom: -1px; right: -1px; border-bottom: 2px solid var(--gold); border-right: 2px solid var(--gold); }
+  .hero::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, var(--crimson-deep), var(--gold), var(--crimson-deep));
+  }
+  .hero-inner-border {
+    position: absolute; inset: 20px; border: 1px solid rgba(255,255,255,0.08);
+    pointer-events: none;
+  }
+  .hero-inner-border::before, .hero-inner-border::after {
+    content: ''; position: absolute; width: 28px; height: 28px;
+  }
+  .hero-inner-border::before { top: -1px; left: -1px; border-top: 2px solid var(--gold); border-left: 2px solid var(--gold); }
+  .hero-inner-border::after { bottom: -1px; right: -1px; border-bottom: 2px solid var(--gold); border-right: 2px solid var(--gold); }
+
   .hero-content {
-    position: relative; z-index: 2; max-width: 1200px; margin: 0 auto;
-    padding: 60px 80px; display: grid; grid-template-columns: 1fr 1fr;
-    gap: 60px; align-items: center; width: 100%;
+    position: relative; z-index: 2;
+    max-width: 1200px; margin: 0 auto;
+    padding: 60px 60px; width: 100%;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 60px; align-items: center;
   }
-  .hero-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+  .hero-eyebrow {
+    font-size: 10px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--gold-light); margin-bottom: 20px;
+    display: flex; align-items: center; gap: 12px;
+  }
   .hero-eyebrow::before { content: ''; width: 40px; height: 1px; background: var(--gold); }
-  .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(48px,6vw,80px); font-weight: 700; line-height: 1.05; color: var(--dark); margin-bottom: 20px; }
-  .hero-title em { font-style: italic; color: var(--crimson); }
-  .hero-sub { font-size: 12px; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; color: var(--text-light); margin-bottom: 40px; line-height: 2; }
-  .hero-btns { display: flex; gap: 16px; align-items: center; }
-  .hero-img-frame { background: linear-gradient(145deg, var(--gold-light), var(--gold)); padding: 3px; }
-  .hero-img-inner { background: linear-gradient(135deg,#F0E6CC,#E8D5A0); height: 420px; display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--gold-dark); letter-spacing: 2px; font-style: italic; }
-  .hero-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-top: 50px; }
-  .stat-box { text-align: center; padding: 20px 10px; border: 1px solid var(--border); background: rgba(255,255,255,0.7); }
-  .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 700; color: var(--gold-dark); }
-  .stat-label { font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--text-light); margin-top: 4px; }
-  .cat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
-  .cat-card { border: 1px solid var(--border); overflow: hidden; cursor: pointer; transition: all 0.3s; background: var(--white); }
-  .cat-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
-  .cat-img { height: 220px; display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; color: var(--gold-dark); letter-spacing: 2px; font-size: 14px; }
-  .cat-info { padding: 24px; border-top: 1px solid var(--border); }
-  .cat-name { font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--dark); margin-bottom: 8px; }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(40px, 5.5vw, 76px); font-weight: 700; line-height: 1.05;
+    color: var(--white); margin-bottom: 20px;
+  }
+  .hero-title em { font-style: italic; color: var(--gold-light); }
+  .hero-sub {
+    font-size: 11.5px; font-weight: 400; letter-spacing: 2px;
+    color: rgba(255,255,255,0.55); margin-bottom: 40px; line-height: 1.9;
+  }
+  .hero-btns { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+
+  /* RIGHT PANEL */
+  .hero-panel {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.12);
+    backdrop-filter: blur(8px);
+    padding: 36px;
+  }
+  .hero-panel-label {
+    font-size: 9px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 28px;
+    border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 14px;
+  }
+  .hero-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px; }
+  .stat-box {
+    text-align: center; padding: 24px 12px;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 38px; font-weight: 700; color: var(--white);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+    color: rgba(255,255,255,0.4); margin-top: 6px;
+  }
+  .hero-tagline {
+    margin-top: 24px; padding: 18px 20px;
+    background: var(--crimson); color: var(--white);
+    font-family: 'Cormorant Garamond', serif; font-size: 17px;
+    font-style: italic; line-height: 1.5; text-align: center;
+  }
+
+  /* CAT GRID */
+  .cat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 0; }
+  .cat-card {
+    cursor: pointer; transition: all 0.3s; background: var(--white);
+    border: 1px solid var(--border); overflow: hidden;
+    position: relative;
+  }
+  .cat-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(176,16,32,0.15); z-index: 2; }
+  .cat-card:hover .cat-img-overlay { opacity: 1; }
+  .cat-img {
+    height: 200px; display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 700;
+    letter-spacing: 3px; position: relative; overflow: hidden;
+  }
+  .cat-img-overlay {
+    position: absolute; inset: 0; background: rgba(176,16,32,0.7);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.3s;
+    color: var(--white); font-size: 28px; letter-spacing: 1px;
+  }
+  .cat-accent { height: 3px; background: var(--crimson); }
+  .cat-info { padding: 22px; }
+  .cat-name {
+    font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--dark); margin-bottom: 8px;
+  }
   .cat-desc { font-size: 12px; color: var(--text-light); line-height: 1.7; }
-  .news-card { background: var(--white); border: 1px solid var(--border); overflow: hidden; cursor: pointer; transition: all 0.3s; }
-  .news-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.08); }
-  .news-img { height: 180px; display: flex; align-items: center; justify-content: center; font-family:'Cormorant Garamond',serif; font-size:14px; font-weight:700; letter-spacing:3px; }
+  .cat-arrow {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--crimson); margin-top: 14px;
+  }
+
+  /* NEWS */
+  .news-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+  .news-card {
+    background: var(--white); border: 1px solid var(--border);
+    overflow: hidden; cursor: pointer; transition: all 0.3s;
+  }
+  .news-card:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(176,16,32,0.12); }
+  .news-img {
+    height: 170px; display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif; font-size: 15px; font-weight: 700;
+    letter-spacing: 2px; position: relative;
+  }
+  .news-card-accent { height: 3px; background: var(--crimson); }
   .news-card-body { padding: 20px; }
-  .news-cat { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
-  .news-card-title { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 700; color: var(--dark); line-height: 1.3; margin-bottom: 8px; }
-  .news-card-text { font-size: 12px; color: var(--text-light); line-height: 1.6; }
-  @media(max-width:900px){ .hero-content{grid-template-columns:1fr;padding:40px 20px;} .hero-visual{display:none;} .cat-grid{grid-template-columns:1fr;} }
+  .news-cat {
+    font-size: 9.5px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--crimson); margin-bottom: 9px;
+  }
+  .news-card-title {
+    font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 700;
+    color: var(--dark); line-height: 1.3; margin-bottom: 8px;
+  }
+  .news-card-text { font-size: 12px; color: var(--text-light); line-height: 1.65; }
+
+  /* CTA */
+  .cta-section {
+    background: var(--crimson-deep);
+    position: relative; overflow: hidden;
+    padding: 90px 40px; text-align: center;
+  }
+  .cta-section::before {
+    content: ''; position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M40 0L0 40 40 80 80 40z'/%3E%3C/g%3E%3C/svg%3E");
+  }
+  .cta-section::after {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, var(--crimson-light), var(--gold), var(--crimson-light));
+  }
+  .cta-content { position: relative; z-index: 2; max-width: 700px; margin: 0 auto; }
+  .cta-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
+  .cta-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 5vw, 60px); font-weight: 700; color: var(--white); margin-bottom: 14px;
+  }
+  .cta-desc { font-size: 13px; color: rgba(255,255,255,0.55); margin-bottom: 36px; line-height: 1.8; }
+  .cta-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+  /* MOBILE */
+  @media (max-width: 900px) {
+    .hero { margin-top: 60px; }
+    .hero-content { grid-template-columns: 1fr; padding: 40px 20px; gap: 32px; }
+    .hero-visual { order: -1; }
+    .hero-panel { padding: 20px; }
+    .hero-stats { grid-template-columns: repeat(3,1fr); }
+    .cat-grid { grid-template-columns: 1fr; }
+    .news-grid { grid-template-columns: 1fr; }
+    .hero-inner-border { inset: 10px; }
+  }
+  @media (max-width: 600px) {
+    .hero-content { padding: 28px 16px; }
+    .hero-stats { grid-template-columns: repeat(3,1fr); gap: 2px; }
+    .stat-num { font-size: 28px; }
+    .hero-title { font-size: clamp(34px, 9vw, 60px); }
+    .cta-section { padding: 60px 20px; }
+    .hero-panel { padding: 16px; }
+  }
 </style>
 </head>
 <body>
+
+<!-- NAV -->
 <nav>
   <a class="nav-logo" href="index.html">PUFA <span>LAW</span></a>
   <div class="nav-links">
@@ -64,16 +203,29 @@
     <a href="gallery.html">GALLERY</a>
     <a href="team.html">TEAM</a>
     <a href="news.html">NEWS</a>
-    <a href="contact.html">CONTACT US</a>
+    <a href="contact.html">CONTACT</a>
   </div>
   <div class="nav-actions">
     <a href="admin.html" style="text-decoration:none;"><button class="btn-admin">ADMIN</button></a>
+    <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
+<div class="nav-mobile-menu" id="mobileMenu">
+  <a href="index.html" class="active">HOME</a>
+  <a href="about.html">ABOUT</a>
+  <a href="events.html">EVENTS</a>
+  <a href="gallery.html">GALLERY</a>
+  <a href="team.html">TEAM</a>
+  <a href="news.html">NEWS</a>
+  <a href="contact.html">CONTACT</a>
+  <a href="admin.html" class="mobile-admin">ADMIN PANEL</a>
+</div>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-border"></div>
+  <div class="hero-inner-border"></div>
   <div class="hero-content">
     <div class="hero-text">
       <div class="hero-eyebrow" id="heroEyebrow"></div>
@@ -81,23 +233,24 @@
       <p class="hero-sub" id="heroSub"></p>
       <div class="hero-btns">
         <a href="events.html"><button class="btn-primary" id="heroBtn1"></button></a>
-        <a href="gallery.html"><button class="btn-outline" id="heroBtn2"></button></a>
+        <a href="gallery.html"><button class="btn-outline-white" id="heroBtn2"></button></a>
       </div>
     </div>
     <div class="hero-visual">
-      <div class="hero-img-frame">
-        <div class="hero-img-inner">PUFA LAW</div>
-      </div>
-      <div class="hero-stats">
-        <div class="stat-box"><div class="stat-num" id="stat1num"></div><div class="stat-label" id="stat1label"></div></div>
-        <div class="stat-box"><div class="stat-num" id="stat2num"></div><div class="stat-label" id="stat2label"></div></div>
-        <div class="stat-box"><div class="stat-num" id="stat3num"></div><div class="stat-label" id="stat3label"></div></div>
+      <div class="hero-panel">
+        <div class="hero-panel-label">PUFA LAW — STATISTIK</div>
+        <div class="hero-stats">
+          <div class="stat-box"><div class="stat-num" id="stat1num"></div><div class="stat-label" id="stat1label"></div></div>
+          <div class="stat-box"><div class="stat-num" id="stat2num"></div><div class="stat-label" id="stat2label"></div></div>
+          <div class="stat-box"><div class="stat-num" id="stat3num"></div><div class="stat-label" id="stat3label"></div></div>
+        </div>
+        <div class="hero-tagline" id="heroTagline">"Excellence in Law"</div>
       </div>
     </div>
   </div>
 </section>
 
-<div class="gold-divider"></div>
+<div class="red-divider"></div>
 
 <!-- CATEGORIES -->
 <section style="background:var(--white);padding:80px 0;">
@@ -105,36 +258,60 @@
     <div class="section-header">
       <div class="section-eyebrow">Apa yang Kami Tawarkan</div>
       <h2 class="section-title">Temukan <em>Keunggulan</em> Kami</h2>
-      <div class="section-line"></div>
+      <div class="section-line" style="margin:16px auto 0;"></div>
     </div>
     <div class="cat-grid" style="margin-top:40px;">
       <div class="cat-card" onclick="location.href='events.html'">
-        <div class="cat-img" style="background:linear-gradient(135deg,#f0e8d0,#d4b870);">EVENTS</div>
-        <div class="cat-info"><div class="cat-name">Events Eksklusif</div><div class="cat-desc">Seminar hukum, gala dinner, dan konferensi bergengsi yang dirancang untuk pengalaman tak terlupakan.</div></div>
+        <div class="cat-img" style="background:linear-gradient(135deg,#8B0010,#C8182C);">
+          <span style="color:rgba(255,255,255,0.9);">EVENTS</span>
+          <div class="cat-img-overlay">›</div>
+        </div>
+        <div class="cat-accent"></div>
+        <div class="cat-info">
+          <div class="cat-name">Events Eksklusif</div>
+          <div class="cat-desc">Seminar hukum, gala dinner, dan konferensi bergengsi yang dirancang untuk pengalaman tak terlupakan.</div>
+          <div class="cat-arrow">Lihat Events →</div>
+        </div>
       </div>
-      <div class="cat-card" onclick="location.href='gallery.html'" style="border-color:var(--gold);">
-        <div class="cat-img" style="background:linear-gradient(135deg,#8B1A2B,#C9A84C);color:rgba(255,255,255,0.8);">GALLERY</div>
-        <div class="cat-info"><div class="cat-name">Gallery Premium</div><div class="cat-desc">Koleksi foto dan dokumentasi terbaik dari setiap momen berharga PUFA Law sepanjang tahun.</div></div>
+      <div class="cat-card" onclick="location.href='gallery.html'">
+        <div class="cat-img" style="background:linear-gradient(135deg,#1A0808,#7A0A18);">
+          <span style="color:rgba(255,255,255,0.9);">GALLERY</span>
+          <div class="cat-img-overlay">›</div>
+        </div>
+        <div class="cat-accent"></div>
+        <div class="cat-info">
+          <div class="cat-name">Gallery Premium</div>
+          <div class="cat-desc">Koleksi foto dan dokumentasi terbaik dari setiap momen berharga PUFA Law sepanjang tahun.</div>
+          <div class="cat-arrow">Lihat Gallery →</div>
+        </div>
       </div>
       <div class="cat-card" onclick="location.href='team.html'">
-        <div class="cat-img" style="background:linear-gradient(135deg,#e8e0c8,#d4c898);">TEAM</div>
-        <div class="cat-info"><div class="cat-name">Tim Profesional</div><div class="cat-desc">Didukung oleh para profesional berpengalaman di bidang hukum, advokasi, dan manajemen organisasi.</div></div>
+        <div class="cat-img" style="background:linear-gradient(135deg,var(--crimson),var(--dark));">
+          <span style="color:rgba(255,255,255,0.9);">TEAM</span>
+          <div class="cat-img-overlay">›</div>
+        </div>
+        <div class="cat-accent"></div>
+        <div class="cat-info">
+          <div class="cat-name">Tim Profesional</div>
+          <div class="cat-desc">Didukung oleh para profesional berpengalaman di bidang hukum, advokasi, dan manajemen organisasi.</div>
+          <div class="cat-arrow">Kenali Tim →</div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<div class="gold-divider"></div>
+<div class="red-divider"></div>
 
 <!-- LATEST NEWS -->
-<section style="background:var(--off-white);padding:80px 0;">
+<section style="background:var(--crimson-pale);padding:80px 0;">
   <div style="max-width:1200px;margin:0 auto;padding:0 40px;">
     <div class="section-header">
       <div class="section-eyebrow">Terbaru dari PUFA Law</div>
-      <h2 class="section-title">Berita & <em>Liputan</em></h2>
-      <div class="section-line"></div>
+      <h2 class="section-title">Berita &amp; <em>Liputan</em></h2>
+      <div class="section-line" style="margin:16px auto 0;"></div>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px;" id="newsGrid"></div>
+    <div class="news-grid" style="margin-top:40px;" id="newsGrid"></div>
     <div style="text-align:center;margin-top:40px;">
       <a href="news.html"><button class="btn-outline">LIHAT SEMUA BERITA</button></a>
     </div>
@@ -142,12 +319,15 @@
 </section>
 
 <!-- CTA -->
-<section style="background:linear-gradient(135deg,var(--dark),var(--dark-mid),var(--crimson));padding:80px 40px;text-align:center;">
-  <div>
-    <div class="section-eyebrow" id="ctaEyebrow" style="color:var(--gold);"></div>
-    <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,60px);font-weight:700;color:var(--white);margin-bottom:16px;" id="ctaTitle"></h2>
-    <p style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:32px;" id="ctaDesc"></p>
-    <a href="contact.html"><button class="btn-primary" id="ctaBtn"></button></a>
+<section class="cta-section">
+  <div class="cta-content">
+    <div class="cta-eyebrow" id="ctaEyebrow"></div>
+    <h2 class="cta-title" id="ctaTitle"></h2>
+    <p class="cta-desc" id="ctaDesc"></p>
+    <div class="cta-btns">
+      <a href="contact.html"><button class="btn-primary" id="ctaBtn"></button></a>
+      <a href="about.html"><button class="btn-outline-white">TENTANG KAMI</button></a>
+    </div>
   </div>
 </section>
 
@@ -155,7 +335,7 @@
 <footer>
   <div class="footer-grid">
     <div>
-      <div class="footer-brand-name" id="footerBrand">PUFA <span>LAW</span></div>
+      <div class="footer-brand-name">PUFA <span>LAW</span></div>
       <p class="footer-desc" id="footerDesc"></p>
     </div>
     <div><div class="footer-col-title">Navigasi</div><ul class="footer-links"><li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="events.html">Events</a></li><li><a href="gallery.html">Gallery</a></li></ul></div>
@@ -167,6 +347,11 @@
 
 <script src="data.js"></script>
 <script>
+// Mobile menu
+document.getElementById('hamburger').addEventListener('click', function(){
+  document.getElementById('mobileMenu').classList.toggle('open');
+});
+
 (function(){
   const h = PufaData.get('home');
   const s = PufaData.get('settings');
@@ -192,12 +377,13 @@
   document.getElementById('ctaDesc').textContent = h.ctaDesc;
   document.getElementById('ctaBtn').textContent = h.ctaBtn;
 
-  // News preview (3 articles)
+  // News
   const grid = document.getElementById('newsGrid');
   const articles = news.articles.slice(0,3);
   grid.innerHTML = articles.map(a => `
     <div class="news-card" onclick="location.href='news.html'">
-      <div class="news-img" style="background:${a.bg};color:${a.bg.includes('2C2420')?'var(--gold-light)':'var(--gold-dark)'};">${a.label}</div>
+      <div class="news-img" style="background:${a.bg};color:${a.bg.includes('2C2420')?'var(--gold-light)':'rgba(255,255,255,0.9)'};">${a.label}</div>
+      <div class="news-card-accent"></div>
       <div class="news-card-body">
         <div class="news-cat">${a.category}</div>
         <div class="news-card-title">${a.title}</div>

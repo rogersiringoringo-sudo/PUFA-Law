@@ -22,12 +22,31 @@
 <nav>
   <a class="nav-logo" href="index.html">PUFA <span>LAW</span></a>
   <div class="nav-links">
-    <a href="index.html">HOME</a><a href="about.html">ABOUT</a>
-    <a href="events.html">EVENTS</a><a href="gallery.html">GALLERY</a>
-    <a href="team.html">TEAM</a><a href="news.html">NEWS</a><a href="contact.html" class="active">CONTACT US</a>
+    <a href="index.html">HOME</a>
+    <a href="about.html">ABOUT</a>
+    <a href="events.html">EVENTS</a>
+    <a href="gallery.html">GALLERY</a>
+    <a href="team.html">TEAM</a>
+    <a href="news.html">NEWS</a>
+    <a href="contact.html" class="active">CONTACT</a>
   </div>
-  <div class="nav-actions"><a href="admin.html" style="text-decoration:none;"><button class="btn-admin">ADMIN</button></a></div>
+  <div class="nav-actions">
+    <a href="admin.html" style="text-decoration:none;"><button class="btn-admin">ADMIN</button></a>
+    <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 </nav>
+<div class="nav-mobile-menu" id="mobileMenu">
+  <a href="index.html">HOME</a>
+  <a href="about.html">ABOUT</a>
+  <a href="events.html">EVENTS</a>
+  <a href="gallery.html">GALLERY</a>
+  <a href="team.html">TEAM</a>
+  <a href="news.html">NEWS</a>
+  <a href="contact.html" class="active">CONTACT</a>
+  <a href="admin.html" class="mobile-admin">ADMIN PANEL</a>
+</div>
 
 <div class="page-hero">
   <div class="page-hero-content">
@@ -123,6 +142,12 @@ function submitMsg(){
   alert('Terima kasih, ' + name + '! Pesan Anda telah terkirim. Tim PUFA Law akan menghubungi Anda segera.');
   ['msgName','msgEmail','msgPhone','msgText'].forEach(id=>document.getElementById(id).value='');
 }
+</script>
+
+<script>
+document.getElementById('hamburger').addEventListener('click', function(){
+  document.getElementById('mobileMenu').classList.toggle('open');
+});
 </script>
 </body>
 </html>
