@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+/* ===== PUFA LAW — DESIGN TOKENS (ported from legacy/style.css) ===== */
+@theme {
+  /* Brand — Crimson */
+  --color-crimson: #b01020;
+  --color-crimson-deep: #7a0a18;
+  --color-crimson-mid: #c8182c;
+  --color-crimson-light: #e03040;
+  --color-crimson-pale: #fff0f2;
+
+  /* Brand — Gold */
+  --color-gold: #c9a84c;
+  --color-gold-light: #e8c96a;
+  --color-gold-dark: #8b6914;
+
+  /* Neutrals */
+  --color-cream: #fafaf8;
+  --color-offwhite: #f7f3f0;
+  --color-marble: #ededeb;
+  --color-ink: #1a0808;
+  --color-ink-mid: #2c1010;
+  --color-body: #2a1818;
+  --color-body-light: #7a5050;
+
+  /* Typography — wired to next/font CSS variables (see layout.tsx) */
+  --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-cormorant), Georgia, "Times New Roman", serif;
+
+  /* Container */
+  --breakpoint-xs: 26rem;
+}
+
+/* ===== BASE ===== */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: var(--color-cream);
+    color: var(--color-body);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  ::selection {
+    background-color: var(--color-crimson);
+    color: var(--color-cream);
+  }
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-crimson-pale);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-crimson);
+    border-radius: 3px;
+  }
+}
+
+/* ===== REUSABLE COMPONENT CLASSES ===== */
+@layer components {
+  .container-pufa {
+    width: 100%;
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .container-pufa {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  /* Decorative red gradient divider between sections */
+  .red-divider {
+    height: 4px;
+    background: linear-gradient(
+      90deg,
+      var(--color-crimson-deep),
+      var(--color-gold),
+      var(--color-crimson-deep)
+    );
+  }
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-up {
+  animation: fade-up 0.6s ease both;
+}

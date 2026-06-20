@@ -1,0 +1,202 @@
+// PUFA Law — Prisma schema
+// Provider: PostgreSQL (Supabase). Akses data via Prisma (koneksi langsung,
+// bypass RLS); RLS diaktifkan tanpa policy untuk menutup REST API publik.
+// DATABASE_URL = pooler (6543), DIRECT_URL = session pooler (5432) untuk db push.
+// Sinkron skema: `npx prisma db push` (tanpa file migrasi).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ===== SINGLETON CONTENT (selalu 1 baris, id = 1) =====
+
+model SiteSettings {
+  id          Int    @id @default(1)
+  siteName    String
+  tagline     String
+  emailUtama  String
+  whatsapp    String
+  copyright   String
+  footerDesc  String
+  footerRight String
+}
+
+model HomeContent {
+  id         Int    @id @default(1)
+  eyebrow    String
+  title      String
+  sub        String
+  btn1       String
+  btn2       String
+  stat1num   String
+  stat1label String
+  stat2num   String
+  stat2label String
+  stat3num   String
+  stat3label String
+  ctaEyebrow String
+  ctaTitle   String
+  ctaDesc    String
+  ctaBtn     String
+}
+
+model AboutContent {
+  id         Int            @id @default(1)
+  badgeNum   String
+  badgeLabel String
+  quote      String
+  para1      String
+  para2      String
+  values     AboutValue[]
+  timeline   TimelineItem[]
+}
+
+model AboutValue {
+  id      Int          @id @default(autoincrement())
+  name    String
+  desc    String
+  order   Int          @default(0)
+  about   AboutContent @relation(fields: [aboutId], references: [id], onDelete: Cascade)
+  aboutId Int
+}
+
+model TimelineItem {
+  id      Int          @id @default(autoincrement())
+  year    String
+  desc    String
+  order   Int          @default(0)
+  about   AboutContent @relation(fields: [aboutId], references: [id], onDelete: Cascade)
+  aboutId Int
+}
+
+model TeamFeatured {
+  id       Int     @id @default(1)
+  name     String
+  role     String
+  bio      String
+  imageUrl String?
+}
+
+model NewsFeatured {
+  id       Int    @id @default(1)
+  title    String
+  category String
+  author   String
+  date     String
+  readtime String
+  excerpt  String
+}
+
+model ContactInfo {
+  id          Int          @id @default(1)
+  tagline     String
+  desc        String
+  address     String
+  phone       String
+  email       String
+  hours       String
+  formOptions FormOption[]
+}
+
+model FormOption {
+  id        Int         @id @default(autoincrement())
+  label     String
+  order     Int         @default(0)
+  contact   ContactInfo @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  contactId Int
+}
+
+// ===== COLLECTIONS =====
+
+model Event {
+  id       Int     @id @default(autoincrement())
+  name     String
+  date     String // ISO yyyy-mm-dd
+  time     String
+  location String
+  category String
+  status   String  @default("Upcoming")
+  desc     String
+  btn      String  @default("DAFTAR SEKARANG")
+  imageUrl String?
+  order    Int     @default(0)
+}
+
+model Panitia {
+  id       Int    @id @default(autoincrement())
+  name     String
+  role     String
+  division String
+  event    String
+  order    Int    @default(0)
+}
+
+model GalleryItem {
+  id       Int     @id @default(autoincrement())
+  title    String
+  category String
+  bg       String
+  label    String
+  imageUrl String?
+  order    Int     @default(0)
+}
+
+model GalleryFilter {
+  id    Int    @id @default(autoincrement())
+  name  String
+  order Int    @default(0)
+}
+
+model TeamMember {
+  id       Int     @id @default(autoincrement())
+  name     String
+  role     String
+  dept     String
+  status   String  @default("Aktif")
+  imageUrl String?
+  order    Int     @default(0)
+}
+
+model Article {
+  id       Int     @id @default(autoincrement())
+  slug     String  @unique
+  title    String
+  category String
+  author   String
+  date     String // ISO yyyy-mm-dd
+  status   String  @default("Published")
+  excerpt  String
+  content  String?
+  bg       String
+  label    String
+  imageUrl String?
+  order    Int     @default(0)
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  phone     String?
+  purpose   String
+  message   String
+  status    String   @default("Belum Dibaca")
+  createdAt DateTime @default(now())
+}
+
+// ===== AUTH (dipakai di Fase 3) =====
+
+model AdminUser {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  name         String
+  role         String   @default("Admin")
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
