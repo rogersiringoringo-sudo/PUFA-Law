@@ -1,9 +1,14 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Fragment } from "react";
 import { getHome, getNews } from "@/lib/data";
 import { SectionHeader } from "@/components/site/SectionHeader";
 import { NewsCard } from "@/components/site/NewsCard";
 import { buttonVariants } from "@/components/ui/Button";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 const categories = [
   {
