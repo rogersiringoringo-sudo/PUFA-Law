@@ -22,7 +22,7 @@ async function resolveArticle(slug: string) {
       author: f.author,
       date: f.date,
       excerpt: f.excerpt,
-      content: undefined as string | undefined,
+      content: f.content,
       readtime: f.readtime,
     };
   }
@@ -41,7 +41,23 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
   const article = await resolveArticle(slug);
   if (!article) return { title: "Artikel tidak ditemukan" };
-  return { title: article.title, description: article.excerpt };
+  return {
+    title: article.title,
+    description: article.excerpt,
+    alternates: { canonical: `/news/${slug}` },
+    openGraph: {
+      type: "article",
+      title: article.title,
+      description: article.excerpt,
+      images: ["/opengraph-image"],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: article.title,
+      description: article.excerpt,
+      images: ["/opengraph-image"],
+    },
+  };
 }
 
 export default async function ArticlePage({ params }: Params) {
@@ -51,7 +67,7 @@ export default async function ArticlePage({ params }: Params) {
 
   return (
     <>
-      <PageHero title={article.category} subtitle="News & Updates" breadcrumb="News" />
+      <PageHero title={article.title} subtitle={article.category} breadcrumb="News" />
 
       <article className="container-pufa max-w-[820px] py-16 md:py-20">
         <Link
@@ -61,12 +77,9 @@ export default async function ArticlePage({ params }: Params) {
           ← Kembali ke News
         </Link>
 
-        <div className="mb-2 text-[10px] font-bold uppercase tracking-[2px] text-gold">
+        <div className="mb-4 text-[10px] font-bold uppercase tracking-[2px] text-gold">
           {article.category}
         </div>
-        <h1 className="mb-4 font-serif text-[clamp(28px,5vw,48px)] font-bold leading-[1.15] text-ink">
-          {article.title}
-        </h1>
         <div className="mb-8 flex flex-wrap gap-4 border-b border-crimson/15 pb-6 text-[11px] text-body-light">
           <span>{formatDateLong(article.date)}</span>
           <span>oleh {article.author}</span>

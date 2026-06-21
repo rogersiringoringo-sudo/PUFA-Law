@@ -26,10 +26,19 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   keywords: ["PUFA Law", "organisasi hukum", "seminar hukum", "events hukum", "Indonesia"],
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     type: "website",
     locale: "id_ID",
+    url: siteConfig.url,
     siteName: siteConfig.name,
+    title: `${siteConfig.name} — ${siteConfig.tagline}`,
+    description: siteConfig.description,
+  },
+  twitter: {
+    card: "summary_large_image",
     title: `${siteConfig.name} — ${siteConfig.tagline}`,
     description: siteConfig.description,
   },

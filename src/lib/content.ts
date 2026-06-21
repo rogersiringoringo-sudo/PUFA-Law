@@ -168,6 +168,13 @@ const rawArticles: Omit<Article, "slug">[] = [
     status: "Published",
     excerpt:
       "Peluncuran koleksi publikasi terbaru yang terinspirasi dari dedikasi hukum dan keadilan Indonesia...",
+    content: `PUFA Law dengan bangga memperkenalkan The Golden Hour Series — koleksi publikasi eksklusif yang merangkum pemikiran, riset, dan refleksi hukum dari para praktisi serta akademisi terbaik di lingkungan PUFA Law. Koleksi ini lahir dari keyakinan bahwa ilmu hukum tumbuh paling subur ketika dibagikan secara terbuka.
+
+Setiap edisi dalam seri ini membahas isu hukum kontemporer secara mendalam, mulai dari hukum bisnis, perlindungan data pribadi, hingga akses keadilan bagi masyarakat. Penyajiannya dirancang agar tetap kredibel secara akademik namun mudah dipahami oleh pembaca umum.
+
+The Golden Hour Series juga menjadi ruang kolaborasi: anggota PUFA Law dari berbagai kota turut menyumbang artikel, studi kasus, dan catatan praktik. Dengan begitu, koleksi ini merefleksikan keberagaman pengalaman hukum di seluruh Indonesia.
+
+Koleksi perdana akan tersedia bagi seluruh anggota aktif. Untuk informasi pemesanan dan kontribusi naskah edisi berikutnya, silakan hubungi tim PUFA Law melalui halaman kontak.`,
     bg: "linear-gradient(135deg,#f0e8d0,#C9A84C)",
     label: "HUKUM",
   },
@@ -180,6 +187,13 @@ const rawArticles: Omit<Article, "slug">[] = [
     status: "Published",
     excerpt:
       "Tim PUFA Law mulai mempersiapkan acara gala tahunan yang akan digelar di Ballroom Hotel Mulia Jakarta...",
+    content: `Persiapan PUFA Law Gala Night 2026 resmi dimulai. Acara puncak tahunan ini akan digelar di Ballroom Hotel Mulia, Jakarta, dan diproyeksikan menjadi gala terbesar yang pernah diselenggarakan PUFA Law sepanjang sejarahnya.
+
+Panitia yang terdiri dari berbagai divisi — mulai dari acara, logistik, hingga humas — telah memulai rapat koordinasi mingguan. Tahun ini, konsep yang diusung adalah "The Golden Hour", sebuah perayaan atas dedikasi, integritas, dan pencapaian para anggota sepanjang tahun.
+
+Selain jamuan makan malam mewah, gala akan menampilkan penghargaan kepada anggota berprestasi, penampilan istimewa, serta sesi jejaring (networking) bersama tokoh-tokoh hukum nasional. Kehadiran tamu undangan dari kalangan akademisi dan praktisi turut memperkaya makna acara.
+
+Pendaftaran keikutsertaan akan dibuka dalam waktu dekat. Anggota yang ingin terlibat sebagai panitia atau memperoleh informasi tiket dapat menghubungi tim PUFA Law melalui halaman kontak.`,
     bg: "linear-gradient(135deg,#2C2420,#8B1A2B)",
     label: "EVENT",
   },
@@ -192,6 +206,13 @@ const rawArticles: Omit<Article, "slug">[] = [
     status: "Published",
     excerpt:
       "Tonggak sejarah baru tercapai: PUFA Law kini memiliki 5.000 anggota aktif yang tersebar di 15 kota...",
+    content: `Sebuah tonggak sejarah baru tercapai: PUFA Law kini resmi memiliki 5.000 anggota aktif yang tersebar di 15 kota besar di seluruh Indonesia. Pencapaian ini menandai pertumbuhan organisasi yang konsisten sejak didirikan pada 2018.
+
+Pertumbuhan ini tidak lepas dari komitmen PUFA Law membangun komunitas hukum yang inklusif namun tetap profesional. Melalui seminar, workshop, dan program pendampingan, anggota memperoleh ruang untuk berkembang sekaligus berkontribusi bagi masyarakat.
+
+Ekspansi ke berbagai kota juga memperkuat jaringan kolaborasi antar-anggota lintas daerah. Banyak inisiatif hukum pro bono kini lahir dari kolaborasi antar-cabang, memberi dampak nyata bagi akses keadilan di komunitas lokal.
+
+Ke depan, PUFA Law menargetkan penguatan program digital agar anggota di seluruh nusantara dapat terhubung tanpa hambatan jarak. Bagi yang ingin bergabung, informasi keanggotaan tersedia melalui halaman kontak.`,
     bg: "linear-gradient(135deg,#e8e0c8,#8B6914)",
     label: "KOMUNITAS",
   },
@@ -206,6 +227,15 @@ export const newsContent: NewsContent = {
     readtime: "5 menit baca",
     excerpt:
       "Seminar tahunan PUFA Law kembali hadir dengan lebih spektakuler dari sebelumnya. Tahun ini, menghadirkan 28 pembicara dari seluruh nusantara dan 5 nama internasional, menciptakan kolaborasi hukum yang memukau...",
+    content: `PUFA Law Annual Seminar 2026 kembali hadir dengan skala yang lebih besar dan ambisi yang lebih berani: mendefinisikan ulang arah hukum Indonesia di tengah perubahan zaman. Tahun ini, seminar menghadirkan 28 pembicara dari seluruh nusantara serta 5 nama internasional.
+
+Mengangkat tema besar tentang transformasi hukum di era digital, seminar membahas isu-isu mendesak seperti perlindungan data pribadi, kecerdasan buatan dan tanggung jawab hukum, hingga reformasi akses keadilan bagi kelompok rentan.
+
+Format seminar dirancang interaktif: selain sesi pleno, peserta dapat mengikuti diskusi kelompok terfokus, lokakarya penulisan hukum, dan sesi mentoring bersama praktisi senior. Pendekatan ini memastikan setiap peserta pulang dengan wawasan yang dapat langsung diterapkan.
+
+Kolaborasi lintas generasi dan lintas daerah menjadi ruh acara ini. PUFA Law percaya bahwa masa depan hukum Indonesia ditentukan oleh kemampuan kita berdialog, berbagi, dan bekerja sama.
+
+Informasi pendaftaran dan kemitraan untuk seminar tahun ini dapat diperoleh melalui halaman kontak PUFA Law.`,
   },
   articles: rawArticles.map((a) => ({ ...a, slug: slugify(a.title) })),
 };

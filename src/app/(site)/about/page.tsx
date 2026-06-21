@@ -5,6 +5,7 @@ import { PageHero } from "@/components/site/PageHero";
 export const metadata: Metadata = {
   title: "About",
   description: "Kisah, visi, dan nilai-nilai di balik PUFA Law.",
+  alternates: { canonical: "/about" },
 };
 
 export default async function AboutPage() {

@@ -207,9 +207,23 @@ export const getNews = unstable_cache(
             date: featured.date,
             readtime: featured.readtime,
             excerpt: featured.excerpt,
+            // Konten featured bersumber dari seed (kolom DB belum ada);
+            // hanya dipakai bila judulnya masih sama dengan seed.
+            content:
+              featured.title === seed.newsContent.featured.title
+                ? seed.newsContent.featured.content
+                : undefined,
           }
         : seed.newsContent.featured,
-      articles: articles.map(mapArticle),
+      // Isi `content` dari seed bila kolom DB masih kosong (mis. belum di-seed
+      // ulang). Konten yang diedit admin di DB tetap diutamakan.
+      articles: articles.map((a) => {
+        const mapped = mapArticle(a);
+        if (!mapped.content) {
+          mapped.content = seed.newsContent.articles.find((s) => s.slug === mapped.slug)?.content;
+        }
+        return mapped;
+      }),
     };
   },
   ["news"],
@@ -219,7 +233,12 @@ export const getNews = unstable_cache(
 export const getArticleBySlug = unstable_cache(
   async (slug: string): Promise<Article | undefined> => {
     const a = await prisma.article.findUnique({ where: { slug } });
-    return a ? mapArticle(a) : undefined;
+    if (!a) return undefined;
+    const mapped = mapArticle(a);
+    if (!mapped.content) {
+      mapped.content = seed.newsContent.articles.find((s) => s.slug === mapped.slug)?.content;
+    }
+    return mapped;
   },
   ["article-by-slug"],
   { tags: [TAGS.news], revalidate: REVALIDATE },

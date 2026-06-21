@@ -33,11 +33,18 @@ export function LoginForm() {
         name="email"
         type="email"
         required
+        autoComplete="username"
         placeholder="Email Admin"
-        defaultValue="admin@pufalaw.id"
         className={inputClass}
       />
-      <input name="password" type="password" required placeholder="Password" className={inputClass} />
+      <input
+        name="password"
+        type="password"
+        required
+        autoComplete="current-password"
+        placeholder="Password"
+        className={inputClass}
+      />
       <SubmitButton />
       <Link
         href="/"
