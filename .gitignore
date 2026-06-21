@@ -37,3 +37,5 @@ next-env.d.ts
 # test artifacts (Playwright / QA screenshots)
 /.playwright-mcp/
 qa-*.png
+qa-*.jpeg
+qa-*.jpg

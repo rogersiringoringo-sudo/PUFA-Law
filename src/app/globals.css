@@ -87,6 +87,30 @@
   }
 }
 
+/* ===== ACCESSIBILITY ===== */
+@layer components {
+  /* Skip-to-content link: tersembunyi sampai difokuskan via keyboard. */
+  .skip-link {
+    position: fixed;
+    left: 0.75rem;
+    top: -4rem;
+    z-index: 100;
+    background: var(--color-ink);
+    color: var(--color-cream);
+    border: 2px solid var(--color-gold);
+    padding: 0.6rem 1rem;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-radius: 2px;
+    transition: top 0.2s ease;
+  }
+  .skip-link:focus {
+    top: 0.75rem;
+  }
+}
+
 /* ===== ANIMATIONS ===== */
 @keyframes fade-up {
   from {
@@ -100,4 +124,36 @@
 }
 .animate-fade-up {
   animation: fade-up 0.6s ease both;
+}
+
+/* Scroll-reveal (progressive enhancement; lihat <Reveal> + <noscript> fallback) */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Hormati preferensi gerak-berkurang: matikan animasi & smooth-scroll. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }

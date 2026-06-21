@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getContact } from "@/lib/data";
 import { PageHero } from "@/components/site/PageHero";
 import { ContactForm } from "@/components/site/ContactForm";
+import { Reveal } from "@/components/site/Reveal";
 
 export const metadata: Metadata = {
   title: "Contact Us",
@@ -29,7 +30,7 @@ export default async function ContactPage() {
       <section className="container-pufa py-16 md:py-20">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-16">
           {/* Info */}
-          <div>
+          <Reveal>
             <div className="mb-3 flex items-center gap-2.5 text-[10px] font-bold uppercase tracking-[4px] text-crimson before:h-0.5 before:w-7 before:bg-crimson">
               Kontak Kami
             </div>
@@ -53,7 +54,7 @@ export default async function ContactPage() {
                     {it.icon}
                   </div>
                   <div>
-                    <div className="mb-1 text-[10px] font-bold uppercase tracking-[2px] text-gold">
+                    <div className="mb-1 text-[10px] font-bold uppercase tracking-[2px] text-gold-dark">
                       {it.label}
                     </div>
                     <div className="whitespace-pre-line text-[13px] leading-[1.7] text-body">
@@ -63,10 +64,12 @@ export default async function ContactPage() {
                 </div>
               ))}
             </div>
-          </div>
+          </Reveal>
 
           {/* Form */}
-          <ContactForm purposes={c.formOptions} />
+          <Reveal delay={120}>
+            <ContactForm purposes={c.formOptions} />
+          </Reveal>
         </div>
       </section>
     </>

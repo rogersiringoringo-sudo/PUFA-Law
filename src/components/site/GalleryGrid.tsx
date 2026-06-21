@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { GalleryItem } from "@/types/content";
 import { MediaBox } from "@/components/site/MediaBox";
 import { cn } from "@/lib/utils";
@@ -14,20 +14,51 @@ export function GalleryGrid({
 }) {
   const [active, setActive] = useState(filters[0] ?? "Semua");
   const [lightbox, setLightbox] = useState<GalleryItem | null>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const lastFocused = useRef<HTMLElement | null>(null);
 
   const shown = active === "Semua" ? items : items.filter((g) => g.category === active);
 
-  // Tutup lightbox dengan Escape + kunci scroll body saat terbuka.
+  // Saat lightbox terbuka: kunci scroll, Escape menutup, jebak fokus di dalam
+  // dialog, dan kembalikan fokus ke pemicu saat ditutup (aksesibilitas).
   useEffect(() => {
     if (!lightbox) return;
+    lastFocused.current = document.activeElement as HTMLElement | null;
+
+    const focusables = () =>
+      Array.from(
+        dialogRef.current?.querySelectorAll<HTMLElement>(
+          'button, [href], [tabindex]:not([tabindex="-1"])',
+        ) ?? [],
+      );
+    focusables()[0]?.focus();
+
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setLightbox(null);
+      if (e.key === "Escape") {
+        setLightbox(null);
+        return;
+      }
+      if (e.key === "Tab") {
+        const f = focusables();
+        if (f.length === 0) return;
+        const first = f[0];
+        const last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
     };
+
     document.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
     return () => {
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
+      lastFocused.current?.focus?.();
     };
   }, [lightbox]);
 
@@ -81,6 +112,7 @@ export function GalleryGrid({
       {/* Lightbox */}
       {lightbox && (
         <div
+          ref={dialogRef}
           role="dialog"
           aria-modal="true"
           aria-label={lightbox.title}

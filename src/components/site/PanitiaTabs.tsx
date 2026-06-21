@@ -39,7 +39,7 @@ export function PanitiaTabs({ groups }: { groups: { event: string; members: Pani
               {initials(m.name)}
             </div>
             <div className="mb-1 text-[13px] font-bold text-ink">{m.name}</div>
-            <div className="mb-1.5 text-[10px] font-semibold uppercase tracking-[2px] text-gold">
+            <div className="mb-1.5 text-[10px] font-semibold uppercase tracking-[2px] text-gold-dark">
               {m.role}
             </div>
             <div className="text-[11px] text-body-light">{m.division}</div>
