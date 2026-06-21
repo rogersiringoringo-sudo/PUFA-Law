@@ -15,7 +15,11 @@ const DEFAULT_WINDOW_MS = 15 * 60 * 1000; // 15 menit
 function recent(key: string, windowMs: number): number[] {
   const now = Date.now();
   const arr = (buckets.get(key) ?? []).filter((t) => now - t < windowMs);
-  buckets.set(key, arr);
+  // Jangan biarkan key kosong menumpuk (mencegah pertumbuhan Map tak terbatas
+  // saat banyak email unik dicoba). `registerFailure` akan menulis ulang key
+  // dengan timestamp baru bila perlu.
+  if (arr.length > 0) buckets.set(key, arr);
+  else buckets.delete(key);
   return arr;
 }
 

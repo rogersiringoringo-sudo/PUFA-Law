@@ -18,8 +18,14 @@ export async function submitMessage(
 ): Promise<ContactState> {
   // Honeypot anti-spam: field tersembunyi yang hanya diisi bot.
   // Pura-pura sukses agar bot tidak tahu telah diblokir, tanpa menulis ke DB.
+  // Dicatat ke log agar potensi false-positive (mis. autofill) bisa ditelusuri,
+  // jadi tidak benar-benar "silent".
   const honeypot = String(formData.get("company") ?? "").trim();
-  if (honeypot) return { ok: true };
+  if (honeypot) {
+    const email = String(formData.get("email") ?? "").trim();
+    console.warn(`[contact] honeypot terisi — pesan diabaikan${email ? ` (email: ${email})` : ""}`);
+    return { ok: true };
+  }
 
   const name = String(formData.get("name") ?? "").trim();
   const email = String(formData.get("email") ?? "").trim();
