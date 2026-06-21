@@ -4,6 +4,7 @@ import { Fragment } from "react";
 import { getHome, getNews } from "@/lib/data";
 import { SectionHeader } from "@/components/site/SectionHeader";
 import { NewsCard } from "@/components/site/NewsCard";
+import { Reveal } from "@/components/site/Reveal";
 import { buttonVariants } from "@/components/ui/Button";
 
 export const metadata: Metadata = {
@@ -113,16 +114,19 @@ export default async function HomePage() {
       {/* ===== CATEGORIES ===== */}
       <section className="bg-cream py-16 md:py-20">
         <div className="container-pufa">
-          <SectionHeader
-            eyebrow="Apa yang Kami Tawarkan"
-            title={
-              <>
-                Temukan <em>Keunggulan</em> Kami
-              </>
-            }
-          />
-          <div className="grid grid-cols-1 gap-px md:grid-cols-3">
-            {categories.map((c) => (
+          <Reveal>
+            <SectionHeader
+              eyebrow="Apa yang Kami Tawarkan"
+              title={
+                <>
+                  Temukan <em>Keunggulan</em> Kami
+                </>
+              }
+            />
+          </Reveal>
+          <Reveal delay={120}>
+            <div className="grid grid-cols-1 gap-px md:grid-cols-3">
+              {categories.map((c) => (
               <Link
                 key={c.href}
                 href={c.href}
@@ -149,7 +153,8 @@ export default async function HomePage() {
                 </div>
               </Link>
             ))}
-          </div>
+            </div>
+          </Reveal>
         </div>
       </section>
 
@@ -158,31 +163,35 @@ export default async function HomePage() {
       {/* ===== LATEST NEWS ===== */}
       <section className="bg-crimson-pale py-16 md:py-20">
         <div className="container-pufa">
-          <SectionHeader
-            eyebrow="Terbaru dari PUFA Law"
-            title={
-              <>
-                Berita &amp; <em>Liputan</em>
-              </>
-            }
-          />
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {latest.map((a) => (
-              <NewsCard key={a.id} article={a} />
-            ))}
-          </div>
-          <div className="mt-10 text-center">
-            <Link href="/news" className={buttonVariants("outline")}>
-              Lihat Semua Berita
-            </Link>
-          </div>
+          <Reveal>
+            <SectionHeader
+              eyebrow="Terbaru dari PUFA Law"
+              title={
+                <>
+                  Berita &amp; <em>Liputan</em>
+                </>
+              }
+            />
+          </Reveal>
+          <Reveal delay={120}>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {latest.map((a) => (
+                <NewsCard key={a.id} article={a} />
+              ))}
+            </div>
+            <div className="mt-10 text-center">
+              <Link href="/news" className={buttonVariants("outline")}>
+                Lihat Semua Berita
+              </Link>
+            </div>
+          </Reveal>
         </div>
       </section>
 
       {/* ===== CTA ===== */}
       <section className="relative overflow-hidden bg-crimson-deep px-5 py-20 text-center md:py-24">
         <div className="absolute inset-x-0 top-0 h-1 bg-[linear-gradient(90deg,var(--color-crimson-light),var(--color-gold),var(--color-crimson-light))]" />
-        <div className="relative z-10 mx-auto max-w-[700px]">
+        <Reveal className="relative z-10 mx-auto max-w-[700px]">
           <div className="mb-4 text-[10px] font-bold uppercase tracking-[4px] text-gold">
             {home.ctaEyebrow}
           </div>
@@ -206,7 +215,7 @@ export default async function HomePage() {
               Tentang Kami
             </Link>
           </div>
-        </div>
+        </Reveal>
       </section>
     </>
   );

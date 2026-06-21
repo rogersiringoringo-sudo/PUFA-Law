@@ -44,7 +44,7 @@ export function EventCard({ event }: { event: EventItem }) {
       </div>
 
       <div className="flex flex-1 flex-col p-6">
-        <div className="mb-2 text-[10px] font-bold uppercase tracking-[2px] text-gold">
+        <div className="mb-2 text-[10px] font-bold uppercase tracking-[2px] text-gold-dark">
           {event.category}
         </div>
         <h3 className="mb-2.5 font-serif text-[22px] font-bold leading-[1.3] text-ink">

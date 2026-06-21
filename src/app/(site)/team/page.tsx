@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { getTeam } from "@/lib/data";
 import { PageHero } from "@/components/site/PageHero";
+import { Reveal } from "@/components/site/Reveal";
 import { initials } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -19,7 +20,7 @@ export default async function TeamPage() {
       <PageHero title={<>Our <em>Team</em></>} subtitle="The People Behind PUFA Law" breadcrumb="Team" />
 
       <section className="container-pufa py-16 md:py-20">
-        <div className="mb-8">
+        <Reveal className="mb-8">
           <div className="mb-3 flex items-center gap-2.5 text-[10px] font-bold uppercase tracking-[4px] text-crimson before:h-0.5 before:w-7 before:bg-crimson">
             Pemimpin Kami
           </div>
@@ -27,10 +28,10 @@ export default async function TeamPage() {
             Tim <em className="italic text-crimson">PUFA Law</em>
           </h2>
           <div className="mt-4 h-[3px] w-12 bg-crimson" />
-        </div>
+        </Reveal>
 
         {/* Featured */}
-        <div className="mb-12 grid grid-cols-1 items-center gap-9 border border-crimson/15 bg-[linear-gradient(135deg,var(--color-ink),var(--color-ink-mid))] p-7 md:mb-14 md:grid-cols-[180px_1fr] md:p-12">
+        <Reveal delay={120} className="mb-12 grid grid-cols-1 items-center gap-9 border border-crimson/15 bg-[linear-gradient(135deg,var(--color-ink),var(--color-ink-mid))] p-7 md:mb-14 md:grid-cols-[180px_1fr] md:p-12">
           <div className="mx-auto flex h-[140px] w-[140px] items-center justify-center border-[3px] border-gold bg-[linear-gradient(135deg,var(--color-gold),var(--color-gold-dark))] font-serif text-[40px] font-bold text-ink md:h-[180px] md:w-[180px] md:text-[44px]">
             {f.imageUrl ? (
               <Image
@@ -51,14 +52,15 @@ export default async function TeamPage() {
             </div>
             <p className="text-[13px] leading-[1.85] text-white/65">{f.bio}</p>
           </div>
-        </div>
+        </Reveal>
 
         {/* Members */}
-        <div className="mb-5 flex items-center gap-2.5 text-[10px] font-bold uppercase tracking-[4px] text-crimson before:h-0.5 before:w-7 before:bg-crimson">
-          Jajaran Tim Inti
-        </div>
-        <div className="grid grid-cols-2 gap-5 md:grid-cols-4 md:gap-6">
-          {team.members.map((m) => (
+        <Reveal>
+          <div className="mb-5 flex items-center gap-2.5 text-[10px] font-bold uppercase tracking-[4px] text-crimson before:h-0.5 before:w-7 before:bg-crimson">
+            Jajaran Tim Inti
+          </div>
+          <div className="grid grid-cols-2 gap-5 md:grid-cols-4 md:gap-6">
+            {team.members.map((m) => (
             <article
               key={m.id}
               className="overflow-hidden border border-crimson/15 bg-cream transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_16px_36px_rgba(0,0,0,0.1)]"
@@ -78,14 +80,15 @@ export default async function TeamPage() {
               </div>
               <div className="border-t-2 border-gold p-4">
                 <div className="mb-0.5 font-serif text-lg font-bold text-ink md:text-xl">{m.name}</div>
-                <div className="text-[10px] font-semibold uppercase tracking-[2px] text-gold">
+                <div className="text-[10px] font-semibold uppercase tracking-[2px] text-gold-dark">
                   {m.role}
                 </div>
                 <div className="mt-1 text-[11px] text-body-light">{m.dept}</div>
               </div>
             </article>
-          ))}
-        </div>
+            ))}
+          </div>
+        </Reveal>
       </section>
     </>
   );

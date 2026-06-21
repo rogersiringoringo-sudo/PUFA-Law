@@ -3,6 +3,7 @@ import { getEvents, getPanitia } from "@/lib/data";
 import { PageHero } from "@/components/site/PageHero";
 import { EventCard } from "@/components/site/EventCard";
 import { PanitiaTabs } from "@/components/site/PanitiaTabs";
+import { Reveal } from "@/components/site/Reveal";
 import type { Panitia } from "@/types/content";
 
 export const metadata: Metadata = {
@@ -27,7 +28,7 @@ export default async function EventsPage() {
       <PageHero title={<>Upcoming <em>Events</em></>} subtitle="Jadwal & Pelaksanaan" breadcrumb="Events" />
 
       <section className="container-pufa py-16 md:py-20">
-        <div className="mb-10">
+        <Reveal className="mb-10">
           <div className="mb-3 flex items-center gap-2.5 text-[10px] font-bold uppercase tracking-[4px] text-crimson before:h-0.5 before:w-7 before:bg-crimson">
             Acara Mendatang &amp; Terdahulu
           </div>
@@ -35,16 +36,18 @@ export default async function EventsPage() {
             Kalender <em className="italic text-crimson">PUFA Law</em>
           </h2>
           <div className="mt-4 h-[3px] w-12 bg-crimson" />
-        </div>
+        </Reveal>
 
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-          {events.map((e) => (
-            <EventCard key={e.id} event={e} />
-          ))}
-        </div>
+        <Reveal delay={120}>
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+            {events.map((e) => (
+              <EventCard key={e.id} event={e} />
+            ))}
+          </div>
+        </Reveal>
 
         {/* Panitia */}
-        <div className="mt-16">
+        <Reveal className="mt-16">
           <div className="mb-3 flex items-center gap-2.5 text-[10px] font-bold uppercase tracking-[4px] text-crimson before:h-0.5 before:w-7 before:bg-crimson">
             Struktur Kepanitiaan
           </div>
@@ -55,7 +58,7 @@ export default async function EventsPage() {
             Kenali para profesional yang bertanggung jawab dalam menyukseskan setiap event PUFA Law.
           </p>
           <PanitiaTabs groups={groups} />
-        </div>
+        </Reveal>
       </section>
     </>
   );

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getAbout } from "@/lib/data";
 import { PageHero } from "@/components/site/PageHero";
+import { Reveal } from "@/components/site/Reveal";
 
 export const metadata: Metadata = {
   title: "About",
@@ -17,7 +18,7 @@ export default async function AboutPage() {
 
       {/* Intro grid */}
       <section className="container-pufa grid grid-cols-1 items-center gap-12 py-16 md:grid-cols-2 md:gap-20 md:py-20">
-        <div className="relative">
+        <Reveal className="relative">
           <div className="flex h-[340px] items-center justify-center border border-crimson/15 bg-[linear-gradient(135deg,var(--color-offwhite),var(--color-marble))] font-serif text-[32px] font-bold tracking-[4px] text-gold-dark md:h-[480px]">
             PUFA LAW
           </div>
@@ -27,9 +28,9 @@ export default async function AboutPage() {
               {about.badgeLabel}
             </span>
           </div>
-        </div>
+        </Reveal>
 
-        <div>
+        <Reveal delay={120}>
           <div className="mb-3 flex items-center gap-2.5 text-[10px] font-bold uppercase tracking-[4px] text-crimson before:h-0.5 before:w-7 before:bg-crimson">
             Tentang Kami
           </div>
@@ -55,21 +56,24 @@ export default async function AboutPage() {
               </div>
             ))}
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/* Timeline */}
       <section className="bg-ink px-4 py-16 md:px-10 md:py-20">
         <div className="mx-auto max-w-[800px] text-center">
-          <div className="mb-3 flex items-center justify-center text-[10px] font-bold uppercase tracking-[4px] text-gold">
-            Perjalanan Kami
-          </div>
-          <h2 className="mb-12 font-serif text-[clamp(28px,4vw,48px)] font-bold text-cream">
-            Milestones <em className="italic text-gold-light">PUFA Law</em>
-          </h2>
+          <Reveal>
+            <div className="mb-3 flex items-center justify-center text-[10px] font-bold uppercase tracking-[4px] text-gold">
+              Perjalanan Kami
+            </div>
+            <h2 className="mb-12 font-serif text-[clamp(28px,4vw,48px)] font-bold text-cream">
+              Milestones <em className="italic text-gold-light">PUFA Law</em>
+            </h2>
+          </Reveal>
 
-          <ol className="relative space-y-7 before:absolute before:left-[7px] before:top-2 before:h-full before:w-px before:bg-crimson/30 md:before:left-1/2 md:before:-translate-x-1/2">
-            {about.timeline.map((t, i) => (
+          <Reveal delay={120}>
+            <ol className="relative space-y-7 before:absolute before:left-[7px] before:top-2 before:h-full before:w-px before:bg-crimson/30 md:before:left-1/2 md:before:-translate-x-1/2">
+              {about.timeline.map((t, i) => (
               <li key={t.year} className="relative flex items-start gap-5 md:items-center">
                 {/* mobile: dot left; desktop: alternating */}
                 <span
@@ -82,8 +86,9 @@ export default async function AboutPage() {
                   <div className="text-[13px] text-white/70">{t.desc}</div>
                 </div>
               </li>
-            ))}
-          </ol>
+              ))}
+            </ol>
+          </Reveal>
         </div>
       </section>
     </>

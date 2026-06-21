@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getNews } from "@/lib/data";
 import { PageHero } from "@/components/site/PageHero";
+import { Reveal } from "@/components/site/Reveal";
 import { buttonVariants } from "@/components/ui/Button";
 import { formatDateLong, slugify } from "@/lib/utils";
 
@@ -77,7 +78,7 @@ export default async function ArticlePage({ params }: Params) {
           ← Kembali ke News
         </Link>
 
-        <div className="mb-4 text-[10px] font-bold uppercase tracking-[2px] text-gold">
+        <div className="mb-4 text-[10px] font-bold uppercase tracking-[2px] text-gold-dark">
           {article.category}
         </div>
         <div className="mb-8 flex flex-wrap gap-4 border-b border-crimson/15 pb-6 text-[11px] text-body-light">
@@ -86,7 +87,7 @@ export default async function ArticlePage({ params }: Params) {
           {article.readtime && <span>{article.readtime}</span>}
         </div>
 
-        <div className="prose-pufa space-y-5 text-[15px] leading-[1.9] text-body">
+        <Reveal className="prose-pufa space-y-5 text-[15px] leading-[1.9] text-body">
           <p className="font-serif text-[20px] italic leading-[1.5] text-crimson">{article.excerpt}</p>
           {article.content ? (
             article.content.split("\n\n").map((para, i) => <p key={i}>{para}</p>)
@@ -96,7 +97,7 @@ export default async function ArticlePage({ params }: Params) {
               tim PUFA Law melalui halaman kontak.
             </p>
           )}
-        </div>
+        </Reveal>
 
         <div className="mt-12 border-t border-crimson/15 pt-8">
           <Link href="/contact" className={buttonVariants("outline")}>
