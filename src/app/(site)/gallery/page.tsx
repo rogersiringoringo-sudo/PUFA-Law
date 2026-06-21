@@ -6,6 +6,7 @@ import { GalleryGrid } from "@/components/site/GalleryGrid";
 export const metadata: Metadata = {
   title: "Gallery",
   description: "Koleksi foto dan dokumentasi momen berharga PUFA Law.",
+  alternates: { canonical: "/gallery" },
 };
 
 export default async function GalleryPage() {

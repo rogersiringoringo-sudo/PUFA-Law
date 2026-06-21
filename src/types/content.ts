@@ -115,6 +115,7 @@ export interface NewsContent {
     date: string;
     readtime: string;
     excerpt: string;
+    content?: string;
   };
   articles: Article[];
 }

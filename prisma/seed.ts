@@ -129,7 +129,11 @@ async function main() {
   });
 
   // --- News ---
-  await prisma.newsFeatured.create({ data: { id: 1, ...c.newsContent.featured } });
+  // `content` featured tidak punya kolom DB (disajikan via seed fallback), jadi
+  // hanya field yang ada di skema yang ditulis.
+  const { content: _featuredContent, ...featuredData } = c.newsContent.featured;
+  void _featuredContent;
+  await prisma.newsFeatured.create({ data: { id: 1, ...featuredData } });
   await prisma.article.createMany({
     data: c.newsContent.articles.map((a, i) => ({
       slug: a.slug,

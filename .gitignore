@@ -33,3 +33,7 @@ next-env.d.ts
 
 # vercel
 .vercel
+
+# test artifacts (Playwright / QA screenshots)
+/.playwright-mcp/
+qa-*.png

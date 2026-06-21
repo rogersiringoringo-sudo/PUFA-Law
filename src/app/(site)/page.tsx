@@ -74,8 +74,8 @@ export default async function HomePage() {
             </div>
           </div>
 
-          {/* Right — stats panel */}
-          <div className="order-first md:order-none">
+          {/* Right — stats panel (di bawah headline pada mobile) */}
+          <div>
             <div className="border border-white/[0.12] bg-white/[0.05] p-5 backdrop-blur-sm md:p-9">
               <div className="mb-7 border-b border-white/[0.08] pb-3.5 text-[9px] font-bold uppercase tracking-[3px] text-gold">
                 PUFA LAW — STATISTIK

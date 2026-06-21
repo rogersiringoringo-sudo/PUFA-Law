@@ -8,6 +8,7 @@ import type { Panitia } from "@/types/content";
 export const metadata: Metadata = {
   title: "Events",
   description: "Jadwal seminar, gala dinner, dan acara PUFA Law mendatang serta terdahulu.",
+  alternates: { canonical: "/events" },
 };
 
 export default async function EventsPage() {

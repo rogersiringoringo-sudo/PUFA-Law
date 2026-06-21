@@ -9,6 +9,7 @@ import { formatDateLong, slugify } from "@/lib/utils";
 export const metadata: Metadata = {
   title: "News",
   description: "Berita, artikel, dan jurnal terbaru dari PUFA Law.",
+  alternates: { canonical: "/news" },
 };
 
 export default async function NewsPage() {

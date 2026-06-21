@@ -57,7 +57,11 @@ export function EventCard({ event }: { event: EventItem }) {
         </div>
         <p className="mb-5 text-xs leading-[1.7] text-body-light">{event.desc}</p>
         <div className="mt-auto">
-          <Link href="/contact" className={buttonVariants(past ? "outline" : "primary")}>
+          {/* Event selesai → arahkan ke dokumentasi (gallery); mendatang → pendaftaran (kontak). */}
+          <Link
+            href={past ? "/gallery" : "/contact"}
+            className={buttonVariants(past ? "outline" : "primary")}
+          >
             {event.btn}
           </Link>
         </div>

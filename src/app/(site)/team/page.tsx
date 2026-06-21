@@ -7,6 +7,7 @@ import { initials } from "@/lib/utils";
 export const metadata: Metadata = {
   title: "Team",
   description: "Para profesional di balik PUFA Law — pemimpin dan tim inti.",
+  alternates: { canonical: "/team" },
 };
 
 export default async function TeamPage() {

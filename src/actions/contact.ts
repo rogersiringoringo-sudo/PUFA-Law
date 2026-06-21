@@ -16,6 +16,11 @@ export async function submitMessage(
   _prev: ContactState,
   formData: FormData,
 ): Promise<ContactState> {
+  // Honeypot anti-spam: field tersembunyi yang hanya diisi bot.
+  // Pura-pura sukses agar bot tidak tahu telah diblokir, tanpa menulis ke DB.
+  const honeypot = String(formData.get("company") ?? "").trim();
+  if (honeypot) return { ok: true };
+
   const name = String(formData.get("name") ?? "").trim();
   const email = String(formData.get("email") ?? "").trim();
   const phone = String(formData.get("phone") ?? "").trim();
@@ -24,6 +29,7 @@ export async function submitMessage(
 
   if (!name || !email) return { ok: false, error: "Mohon isi nama dan email terlebih dahulu." };
   if (!EMAIL_RE.test(email)) return { ok: false, error: "Format email tidak valid." };
+  if (!message) return { ok: false, error: "Mohon tuliskan pesan Anda." };
 
   try {
     await prisma.message.create({

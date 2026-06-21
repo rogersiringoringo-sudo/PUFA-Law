@@ -6,6 +6,7 @@ import { ContactForm } from "@/components/site/ContactForm";
 export const metadata: Metadata = {
   title: "Contact Us",
   description: "Hubungi PUFA Law untuk konsultasi, keanggotaan, atau kerjasama.",
+  alternates: { canonical: "/contact" },
 };
 
 export default async function ContactPage() {
